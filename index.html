@@ -27,6 +27,7 @@ Attendance Checker
   box-sizing: border-box;
 }
 
+
 body {
 
   margin: 0;
@@ -43,6 +44,11 @@ body {
 
 }
 
+
+/* ============================================================
+   HEADER
+============================================================ */
+
 .header {
 
   background:
@@ -55,9 +61,10 @@ body {
     center;
 
   padding:
-    22px;
+    20px;
 
 }
+
 
 .header h1 {
 
@@ -69,6 +76,7 @@ body {
 
 }
 
+
 .header p {
 
   margin:
@@ -78,6 +86,11 @@ body {
     14px;
 
 }
+
+
+/* ============================================================
+   CONTAINER
+============================================================ */
 
 .container {
 
@@ -95,6 +108,135 @@ body {
 
 }
 
+
+/* ============================================================
+   SESSION BOX
+============================================================ */
+
+.session-box {
+
+  background:
+    white;
+
+  border-radius:
+    15px;
+
+  padding:
+    18px;
+
+  margin-bottom:
+    15px;
+
+  box-shadow:
+    0 4px 15px
+    rgba(0,0,0,0.12);
+
+  text-align:
+    center;
+
+}
+
+
+.session-label {
+
+  font-size:
+    12px;
+
+  color:
+    #777;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    1px;
+
+}
+
+
+.session-name {
+
+  font-size:
+    22px;
+
+  font-weight:
+    bold;
+
+  margin-top:
+    7px;
+
+}
+
+
+.session-id {
+
+  font-size:
+    13px;
+
+  color:
+    #777;
+
+  margin-top:
+    4px;
+
+}
+
+
+.session-buttons {
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
+  margin-top:
+    15px;
+
+}
+
+
+.session-button {
+
+  flex:
+    1;
+
+  padding:
+    12px;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  background:
+    #111;
+
+  color:
+    white;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+
+.session-button:active {
+
+  transform:
+    scale(0.98);
+
+}
+
+
+/* ============================================================
+   SCANNER
+============================================================ */
+
 .scanner-box {
 
   background:
@@ -111,6 +253,7 @@ body {
     rgba(0,0,0,0.12);
 
 }
+
 
 #reader {
 
@@ -143,12 +286,14 @@ body {
 
 }
 
+
 .status.success {
 
   background:
     #dff5e1;
 
 }
+
 
 .status.warning {
 
@@ -157,12 +302,14 @@ body {
 
 }
 
+
 .status.error {
 
   background:
     #ffe0e0;
 
 }
+
 
 .status.info {
 
@@ -171,6 +318,7 @@ body {
 
 }
 
+
 .status.security {
 
   background:
@@ -178,12 +326,14 @@ body {
 
 }
 
+
 .status h2 {
 
   margin:
     0 0 10px;
 
 }
+
 
 .name {
 
@@ -197,6 +347,7 @@ body {
     10px;
 
 }
+
 
 .info {
 
@@ -213,10 +364,7 @@ body {
    SCAN NEXT BUTTON
 ============================================================ */
 
-#scanNextButton {
-
-  display:
-    none;
+.next-button {
 
   width:
     100%;
@@ -248,16 +396,13 @@ body {
   cursor:
     pointer;
 
-}
-
-#scanNextButton:hover {
-
-  opacity:
-    0.85;
+  display:
+    none;
 
 }
 
-#scanNextButton:active {
+
+.next-button:active {
 
   transform:
     scale(0.98);
@@ -266,29 +411,216 @@ body {
 
 
 /* ============================================================
+   SESSION MODAL
+============================================================ */
+
+.modal {
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  background:
+    rgba(0,0,0,0.55);
+
+  display:
+    none;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    20px;
+
+  z-index:
+    1000;
+
+}
+
+
+.modal-content {
+
+  width:
+    100%;
+
+  max-width:
+    430px;
+
+  background:
+    white;
+
+  border-radius:
+    15px;
+
+  padding:
+    22px;
+
+  box-shadow:
+    0 10px 40px
+    rgba(0,0,0,0.25);
+
+}
+
+
+.modal-title {
+
+  font-size:
+    20px;
+
+  font-weight:
+    bold;
+
+  margin-bottom:
+    15px;
+
+}
+
+
+.session-option {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  padding:
+    15px;
+
+  margin-bottom:
+    10px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius:
+    10px;
+
+  background:
+    white;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+}
+
+
+.session-option.active {
+
+  border:
+    2px solid #111;
+
+  background:
+    #f0f0f0;
+
+}
+
+
+.option-name {
+
+  font-weight:
+    bold;
+
+}
+
+
+.option-id {
+
+  font-size:
+    12px;
+
+  color:
+    #777;
+
+  margin-top:
+    4px;
+
+}
+
+
+.modal-buttons {
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
+  margin-top:
+    15px;
+
+}
+
+
+.modal-button {
+
+  flex:
+    1;
+
+  padding:
+    13px;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+
+.cancel-button {
+
+  background:
+    #ddd;
+
+}
+
+
+.activate-button {
+
+  background:
+    #111;
+
+  color:
+    white;
+
+}
+
+
+/* ============================================================
    MOBILE
 ============================================================ */
 
-@media (max-width: 500px) {
+@media (
+  max-width: 400px
+) {
 
   .container {
 
     padding:
-      15px;
+      12px;
 
   }
 
-  .scanner-box {
+  .session-name {
 
-    padding:
-      10px;
-
-  }
-
-  .status {
-
-    padding:
-      18px;
+    font-size:
+      19px;
 
   }
 
@@ -301,6 +633,10 @@ body {
 
 <body>
 
+
+<!-- ==========================================================
+     HEADER
+=========================================================== -->
 
 <div class="header">
 
@@ -318,12 +654,61 @@ Secure QR Attendance Scanner
 <div class="container">
 
 
+<!-- ==========================================================
+     CURRENT SESSION
+=========================================================== -->
+
+<div class="session-box">
+
+<div class="session-label">
+CURRENT SESSION
+</div>
+
+
+<div
+  id="currentSessionName"
+  class="session-name"
+>
+Loading...
+</div>
+
+
+<div
+  id="currentSessionId"
+  class="session-id"
+>
+Please wait...
+</div>
+
+
+<div class="session-buttons">
+
+<button
+  class="session-button"
+  onclick="openSessionSelector()"
+>
+CHANGE SESSION
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ==========================================================
+     SCANNER
+=========================================================== -->
+
 <div class="scanner-box">
 
 <div id="reader"></div>
 
 </div>
 
+
+<!-- ==========================================================
+     STATUS
+=========================================================== -->
 
 <div
   id="status"
@@ -341,13 +726,67 @@ Please allow camera access.
 </div>
 
 
+<!-- ==========================================================
+     NEXT PARTICIPANT
+=========================================================== -->
+
 <button
-  id="scanNextButton"
+  id="nextButton"
+  class="next-button"
   onclick="scanNextParticipant()"
 >
 SCAN NEXT PARTICIPANT
 </button>
 
+
+</div>
+
+
+<!-- ==========================================================
+     SESSION MODAL
+=========================================================== -->
+
+<div
+  id="sessionModal"
+  class="modal"
+>
+
+<div class="modal-content">
+
+
+<div class="modal-title">
+SELECT ATTENDANCE SESSION
+</div>
+
+
+<div
+  id="sessionList"
+>
+Loading sessions...
+</div>
+
+
+<div class="modal-buttons">
+
+<button
+  class="modal-button cancel-button"
+  onclick="closeSessionSelector()"
+>
+CANCEL
+</button>
+
+
+<button
+  class="modal-button activate-button"
+  onclick="activateSelectedSession()"
+>
+ACTIVATE SESSION
+</button>
+
+</div>
+
+
+</div>
 
 </div>
 
@@ -365,27 +804,440 @@ const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
 
 
-let scanner = null;
+/*
+==============================================================
+GLOBAL VARIABLES
+==============================================================
+*/
 
-let processing = false;
+let scanner =
+  null;
 
-let scannerRunning = false;
+
+let processing =
+  false;
 
 
-/* ============================================================
-   START CAMERA / SCANNER
-============================================================ */
+let selectedSessionId =
+  "";
 
-function startScanner() {
+
+let sessions =
+  [];
+
+
+/*
+==============================================================
+LOAD CURRENT SESSION
+==============================================================
+*/
+
+function loadSessions() {
+
+  const callbackName =
+    "sessionsCallback_" +
+    Date.now();
+
+
+  const url =
+    API_URL +
+    "?action=sessions" +
+    "&callback=" +
+    callbackName;
+
+
+  let script =
+    document.createElement(
+      "script"
+    );
+
+
+  window[callbackName] =
+    function(result) {
+
+      if (
+        result &&
+        result.success
+      ) {
+
+        sessions =
+          result.sessions ||
+          [];
+
+
+        if (
+          result.activeSession
+        ) {
+
+          updateCurrentSession(
+            result.activeSession
+          );
+
+        }
+
+      }
+
+      else {
+
+        showStatus(
+          "error",
+          "SESSION ERROR",
+          result.message ||
+          "Unable to load sessions."
+        );
+
+      }
+
+
+      cleanupJsonp(
+        callbackName,
+        script
+      );
+
+    };
+
+
+  script.src =
+    url;
+
+
+  script.onerror =
+    function() {
+
+      showStatus(
+        "error",
+        "SESSION ERROR",
+        "Unable to contact attendance server."
+      );
+
+
+      cleanupJsonp(
+        callbackName,
+        script
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/*
+==============================================================
+UPDATE CURRENT SESSION
+==============================================================
+*/
+
+function updateCurrentSession(
+  session
+) {
+
+  document.getElementById(
+    "currentSessionName"
+  ).textContent =
+    session.sessionName;
+
+
+  document.getElementById(
+    "currentSessionId"
+  ).textContent =
+    session.sessionId;
+
+}
+
+
+/*
+==============================================================
+OPEN SESSION SELECTOR
+==============================================================
+*/
+
+function openSessionSelector() {
+
+  const modal =
+    document.getElementById(
+      "sessionModal"
+    );
+
+
+  const list =
+    document.getElementById(
+      "sessionList"
+    );
+
+
+  list.innerHTML =
+    "";
+
+
+  selectedSessionId =
+    "";
+
 
   if (
-    scannerRunning
+    !sessions.length
   ) {
+
+    list.innerHTML =
+      "<p>No sessions available.</p>";
+
+    modal.style.display =
+      "flex";
 
     return;
 
   }
 
+
+  sessions.forEach(
+    function(session) {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "session-option";
+
+
+      if (
+        session.status ===
+        "ACTIVE"
+      ) {
+
+        button.classList.add(
+          "active"
+        );
+
+      }
+
+
+      button.innerHTML =
+
+        '<div class="option-name">' +
+
+        escapeHtml(
+          session.sessionName
+        ) +
+
+        '</div>' +
+
+        '<div class="option-id">' +
+
+        escapeHtml(
+          session.sessionId
+        ) +
+
+        " • " +
+
+        escapeHtml(
+          session.status
+        ) +
+
+        "</div>";
+
+
+      button.onclick =
+        function() {
+
+          selectedSessionId =
+            session.sessionId;
+
+
+          document
+            .querySelectorAll(
+              ".session-option"
+            )
+            .forEach(
+              function(item) {
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+        };
+
+
+      list.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  modal.style.display =
+    "flex";
+
+}
+
+
+/*
+==============================================================
+CLOSE SESSION SELECTOR
+==============================================================
+*/
+
+function closeSessionSelector() {
+
+  document.getElementById(
+    "sessionModal"
+  ).style.display =
+    "none";
+
+}
+
+
+/*
+==============================================================
+ACTIVATE SELECTED SESSION
+==============================================================
+*/
+
+function activateSelectedSession() {
+
+  if (
+    !selectedSessionId
+  ) {
+
+    showStatus(
+      "warning",
+      "SELECT SESSION",
+      "Please select a session first."
+    );
+
+    return;
+
+  }
+
+
+  const callbackName =
+    "activateSessionCallback_" +
+    Date.now();
+
+
+  const url =
+    API_URL +
+    "?action=activateSession" +
+    "&sessionId=" +
+    encodeURIComponent(
+      selectedSessionId
+    ) +
+    "&callback=" +
+    callbackName;
+
+
+  let script =
+    document.createElement(
+      "script"
+    );
+
+
+  window[callbackName] =
+    function(result) {
+
+      if (
+        result &&
+        result.success
+      ) {
+
+        updateCurrentSession({
+
+          sessionId:
+            result.sessionId,
+
+          sessionName:
+            result.sessionName
+
+        });
+
+
+        closeSessionSelector();
+
+
+        showStatus(
+          "success",
+          "SESSION ACTIVATED",
+          escapeHtml(
+            result.sessionName
+          )
+        );
+
+
+        loadSessions();
+
+      }
+
+      else {
+
+        showStatus(
+          "error",
+          "SESSION ERROR",
+          result.message ||
+          "Unable to activate session."
+        );
+
+      }
+
+
+      cleanupJsonp(
+        callbackName,
+        script
+      );
+
+    };
+
+
+  script.src =
+    url;
+
+
+  script.onerror =
+    function() {
+
+      showStatus(
+        "error",
+        "SYSTEM ERROR",
+        "Unable to contact attendance server."
+      );
+
+
+      cleanupJsonp(
+        callbackName,
+        script
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/*
+==============================================================
+START CAMERA
+==============================================================
+*/
+
+function startScanner() {
 
   if (
     !window.isSecureContext
@@ -418,14 +1270,10 @@ function startScanner() {
   }
 
 
-  if (!scanner) {
-
-    scanner =
-      new Html5Qrcode(
-        "reader"
-      );
-
-  }
+  scanner =
+    new Html5Qrcode(
+      "reader"
+    );
 
 
   scanner.start(
@@ -462,7 +1310,7 @@ function startScanner() {
     function(errorMessage) {
 
       /*
-       * Normal QR scanning failures
+       * Normal scanning failures
        * are ignored.
        */
 
@@ -471,16 +1319,6 @@ function startScanner() {
   )
 
   .then(function() {
-
-    scannerRunning =
-      true;
-
-    processing =
-      false;
-
-
-    hideScanNextButton();
-
 
     showStatus(
       "info",
@@ -491,10 +1329,6 @@ function startScanner() {
   })
 
   .catch(function(error) {
-
-    scannerRunning =
-      false;
-
 
     showStatus(
       "error",
@@ -509,9 +1343,11 @@ function startScanner() {
 }
 
 
-/* ============================================================
-   HANDLE QR CODE
-============================================================ */
+/*
+==============================================================
+HANDLE QR CODE
+==============================================================
+*/
 
 function handleQRCode(
   qrData
@@ -541,23 +1377,12 @@ function handleQRCode(
   }
 
 
-  /*
-   * Make sure QR has secure format.
-   *
-   * Expected:
-   *
-   * PART-00001|signature
-   */
-
   if (
     qrData.indexOf("|") === -1
   ) {
 
     processing =
       true;
-
-
-    stopScanner();
 
 
     showStatus(
@@ -567,7 +1392,7 @@ function handleQRCode(
     );
 
 
-    showScanNextButton();
+    showNextButton();
 
 
     return;
@@ -602,7 +1427,8 @@ function handleQRCode(
     callbackName;
 
 
-  let script = null;
+  let script =
+    null;
 
 
   window[callbackName] =
@@ -654,126 +1480,15 @@ function handleQRCode(
 }
 
 
-/* ============================================================
-   STOP SCANNER
-============================================================ */
-
-function stopScanner() {
-
-  if (
-    !scanner ||
-    !scannerRunning
-  ) {
-
-    return Promise.resolve();
-
-  }
-
-
-  return scanner
-    .stop()
-
-    .then(function() {
-
-      scannerRunning =
-        false;
-
-    })
-
-    .catch(function(error) {
-
-      console.log(
-        "Scanner stop error:",
-        error
-      );
-
-      scannerRunning =
-        false;
-
-    });
-
-}
-
-
-/* ============================================================
-   SCAN NEXT PARTICIPANT
-============================================================ */
-
-function scanNextParticipant() {
-
-  if (
-    processing === false &&
-    scannerRunning === true
-  ) {
-
-    return;
-
-  }
-
-
-  hideScanNextButton();
-
-
-  processing =
-    false;
-
-
-  startScanner();
-
-}
-
-
-/* ============================================================
-   SHOW SCAN NEXT BUTTON
-============================================================ */
-
-function showScanNextButton() {
-
-  const button =
-    document.getElementById(
-      "scanNextButton"
-    );
-
-
-  button.style.display =
-    "block";
-
-}
-
-
-/* ============================================================
-   HIDE SCAN NEXT BUTTON
-============================================================ */
-
-function hideScanNextButton() {
-
-  const button =
-    document.getElementById(
-      "scanNextButton"
-    );
-
-
-  button.style.display =
-    "none";
-
-}
-
-
-/* ============================================================
-   RESULT
-============================================================ */
+/*
+==============================================================
+RESULT
+==============================================================
+*/
 
 function handleResult(
   result
 ) {
-
-  /*
-   * Stop scanning while
-   * displaying the result.
-   */
-
-  stopScanner();
-
 
   if (
     !result
@@ -862,37 +1577,30 @@ function handleResult(
 
   else {
 
-    showStatus(
-
-      "error",
-
-      "SYSTEM ERROR",
-
+    handleError(
       result.message ||
       "Unknown server error."
-
     );
+
+    return;
 
   }
 
 
   /*
-   * Show button instead of
-   * automatically scanning again.
+   * Show Scan Next Participant button.
    */
 
-  processing =
-    true;
-
-
-  showScanNextButton();
+  showNextButton();
 
 }
 
 
-/* ============================================================
-   PARTICIPANT INFO
-============================================================ */
+/*
+==============================================================
+PARTICIPANT INFO
+==============================================================
+*/
 
 function participantInfo(
   result
@@ -936,6 +1644,19 @@ function participantInfo(
       result.participantId
     ) +
 
+    '</div>' +
+
+    '<div class="info">' +
+
+    'Session: <strong>' +
+
+    escapeHtml(
+      result.session ||
+      "Unknown"
+    ) +
+
+    '</strong>' +
+
     '</div>'
 
   );
@@ -943,20 +1664,15 @@ function participantInfo(
 }
 
 
-/* ============================================================
-   ERROR
-============================================================ */
+/*
+==============================================================
+ERROR
+==============================================================
+*/
 
 function handleError(
   message
 ) {
-
-  stopScanner();
-
-
-  processing =
-    true;
-
 
   showStatus(
     "error",
@@ -965,14 +1681,16 @@ function handleError(
   );
 
 
-  showScanNextButton();
+  showNextButton();
 
 }
 
 
-/* ============================================================
-   STATUS
-============================================================ */
+/*
+==============================================================
+STATUS
+==============================================================
+*/
 
 function showStatus(
   type,
@@ -1004,9 +1722,62 @@ function showStatus(
 }
 
 
-/* ============================================================
-   CLEAN JSONP
-============================================================ */
+/*
+==============================================================
+SHOW NEXT BUTTON
+==============================================================
+*/
+
+function showNextButton() {
+
+  const button =
+    document.getElementById(
+      "nextButton"
+    );
+
+
+  button.style.display =
+    "block";
+
+}
+
+
+/*
+==============================================================
+SCAN NEXT PARTICIPANT
+==============================================================
+*/
+
+function scanNextParticipant() {
+
+  processing =
+    false;
+
+
+  const button =
+    document.getElementById(
+      "nextButton"
+    );
+
+
+  button.style.display =
+    "none";
+
+
+  showStatus(
+    "info",
+    "READY",
+    "Scan the next participant QR code."
+  );
+
+}
+
+
+/*
+==============================================================
+CLEAN JSONP
+==============================================================
+*/
 
 function cleanupJsonp(
   callbackName,
@@ -1019,7 +1790,9 @@ function cleanupJsonp(
       callbackName
     ];
 
-  } catch (e) {}
+  }
+
+  catch (e) {}
 
 
   if (
@@ -1036,17 +1809,17 @@ function cleanupJsonp(
 }
 
 
-/* ============================================================
-   ESCAPE HTML
-============================================================ */
+/*
+==============================================================
+ESCAPE HTML
+==============================================================
+*/
 
 function escapeHtml(
   value
 ) {
 
-  return String(
-    value ?? ""
-  )
+  return String(value)
 
     .replace(
       /&/g,
@@ -1076,13 +1849,17 @@ function escapeHtml(
 }
 
 
-/* ============================================================
-   START
-============================================================ */
+/*
+==============================================================
+START
+==============================================================
+*/
 
 window.addEventListener(
   "load",
   function() {
+
+    loadSessions();
 
     startScanner();
 
