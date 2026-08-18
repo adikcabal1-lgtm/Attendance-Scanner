@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -23,6 +22,10 @@ Attendance Checker
 
 <style>
 
+/* ============================================================
+   GLOBAL
+============================================================ */
+
 * {
   box-sizing: border-box;
 }
@@ -43,6 +46,11 @@ body {
 
 }
 
+
+/* ============================================================
+   HEADER
+============================================================ */
+
 .header {
 
   background:
@@ -55,7 +63,7 @@ body {
     center;
 
   padding:
-    22px;
+    22px 15px;
 
 }
 
@@ -65,7 +73,7 @@ body {
     0;
 
   font-size:
-    23px;
+    24px;
 
 }
 
@@ -79,13 +87,18 @@ body {
 
 }
 
+
+/* ============================================================
+   CONTAINER
+============================================================ */
+
 .container {
 
   width:
     100%;
 
   max-width:
-    500px;
+    520px;
 
   margin:
     auto;
@@ -94,6 +107,11 @@ body {
     20px;
 
 }
+
+
+/* ============================================================
+   SCANNER
+============================================================ */
 
 .scanner-box {
 
@@ -119,16 +137,21 @@ body {
 
 }
 
+
+/* ============================================================
+   STATUS CARD
+============================================================ */
+
 .status {
 
   margin-top:
     20px;
 
   padding:
-    20px;
+    25px 20px;
 
   border-radius:
-    12px;
+    15px;
 
   background:
     white;
@@ -136,12 +159,37 @@ body {
   text-align:
     center;
 
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,0.08);
+
+  transition:
+    0.2s;
+
 }
+
+.status h2 {
+
+  margin:
+    0 0 15px;
+
+  font-size:
+    22px;
+
+}
+
+
+/* ============================================================
+   STATUS COLORS
+============================================================ */
 
 .status.success {
 
   background:
     #dff5e1;
+
+  border:
+    2px solid #58a95f;
 
 }
 
@@ -150,12 +198,18 @@ body {
   background:
     #fff0c2;
 
+  border:
+    2px solid #e0b400;
+
 }
 
 .status.error {
 
   background:
     #ffe0e0;
+
+  border:
+    2px solid #d9534f;
 
 }
 
@@ -164,6 +218,9 @@ body {
   background:
     #e7f1ff;
 
+  border:
+    2px solid #6c9bd2;
+
 }
 
 .status.security {
@@ -171,35 +228,140 @@ body {
   background:
     #f7e4ff;
 
-}
-
-.status h2 {
-
-  margin:
-    0 0 10px;
+  border:
+    2px solid #a64ac9;
 
 }
+
+
+/* ============================================================
+   PARTICIPANT INFORMATION
+============================================================ */
 
 .name {
 
   font-size:
-    21px;
+    24px;
 
   font-weight:
     bold;
 
   margin-bottom:
-    10px;
+    15px;
 
 }
 
 .info {
 
   font-size:
-    14px;
+    15px;
 
   margin:
-    5px;
+    7px 0;
+
+}
+
+.attendance-time {
+
+  margin-top:
+    15px;
+
+  font-size:
+    14px;
+
+  font-weight:
+    bold;
+
+}
+
+
+/* ============================================================
+   SCAN AGAIN BUTTON
+============================================================ */
+
+.scan-again {
+
+  margin-top:
+    20px;
+
+  padding:
+    13px 25px;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  background:
+    #111;
+
+  color:
+    white;
+
+  font-size:
+    15px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+.scan-again:hover {
+
+  opacity:
+    0.85;
+
+}
+
+
+/* ============================================================
+   CAMERA ERROR
+============================================================ */
+
+.camera-help {
+
+  margin-top:
+    12px;
+
+  font-size:
+    13px;
+
+  color:
+    #666;
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 500px) {
+
+  .container {
+
+    padding:
+      12px;
+
+  }
+
+  .header h1 {
+
+    font-size:
+      21px;
+
+  }
+
+  .name {
+
+    font-size:
+      21px;
+
+  }
 
 }
 
@@ -210,6 +372,10 @@ body {
 
 <body>
 
+
+<!-- ==========================================================
+     HEADER
+=========================================================== -->
 
 <div class="header">
 
@@ -227,12 +393,20 @@ Secure QR Attendance Scanner
 <div class="container">
 
 
+<!-- ==========================================================
+     SCANNER
+=========================================================== -->
+
 <div class="scanner-box">
 
 <div id="reader"></div>
 
 </div>
 
+
+<!-- ==========================================================
+     STATUS
+=========================================================== -->
 
 <div
   id="status"
@@ -256,19 +430,23 @@ Please allow camera access.
 <script>
 
 
-/*
-==============================================================
-APPS SCRIPT API
-==============================================================
-*/
+/* ============================================================
+   APPS SCRIPT API
+============================================================ */
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
 
 
+/* ============================================================
+   VARIABLES
+============================================================ */
+
 let scanner = null;
 
 let processing = false;
+
+let resetTimer = null;
 
 
 /* ============================================================
@@ -282,9 +460,13 @@ function startScanner() {
   ) {
 
     showStatus(
+
       "error",
+
       "SECURITY ERROR",
+
       "Scanner must be opened through HTTPS."
+
     );
 
     return;
@@ -298,9 +480,13 @@ function startScanner() {
   ) {
 
     showStatus(
+
       "error",
+
       "CAMERA NOT SUPPORTED",
+
       "Your browser does not support camera access."
+
     );
 
     return;
@@ -348,8 +534,8 @@ function startScanner() {
     function(errorMessage) {
 
       /*
-       * Normal scanning failures
-       * are ignored.
+       * Normal QR scanning failures
+       * are intentionally ignored.
        */
 
     }
@@ -359,9 +545,13 @@ function startScanner() {
   .then(function() {
 
     showStatus(
+
       "info",
+
       "READY",
+
       "Scan a participant QR code."
+
     );
 
   })
@@ -369,11 +559,21 @@ function startScanner() {
   .catch(function(error) {
 
     showStatus(
+
       "error",
+
       "CAMERA ERROR",
+
       error.name +
       ": " +
-      error.message
+      error.message +
+
+      '<div class="camera-help">' +
+
+      'Make sure Chrome has camera permission and try again.' +
+
+      '</div>'
+
     );
 
   });
@@ -414,10 +614,7 @@ function handleQRCode(
 
 
   /*
-   * Make sure the QR has the expected
-   * secure format.
-   *
-   * Expected:
+   * Expected secure QR format:
    *
    * PART-00001|signature
    */
@@ -431,15 +628,21 @@ function handleQRCode(
 
 
     showStatus(
+
       "security",
-      "✕ INVALID QR",
-      "This QR code is not a secure participant QR code."
-    );
 
+      "🔒 INVALID QR CODE",
 
-    setTimeout(
-      resetScanner,
-      2500
+      "This QR code is not a secure participant QR code." +
+
+      '<br><br>' +
+
+      '<button class="scan-again" onclick="resetScanner()">' +
+
+      'SCAN AGAIN' +
+
+      '</button>'
+
     );
 
 
@@ -453,9 +656,13 @@ function handleQRCode(
 
 
   showStatus(
+
     "info",
+
     "CHECKING...",
-    "Verifying secure participant QR..."
+
+    "Verifying participant QR code..."
+
   );
 
 
@@ -508,7 +715,9 @@ function handleQRCode(
     function() {
 
       handleError(
+
         "Unable to contact the attendance server."
+
       );
 
 
@@ -560,7 +769,7 @@ function cleanupJsonp(
 
 
 /* ============================================================
-   RESULT
+   HANDLE RESULT
 ============================================================ */
 
 function handleResult(
@@ -572,7 +781,7 @@ function handleResult(
   ) {
 
     handleError(
-      "No response received."
+      "No response received from the attendance server."
     );
 
     return;
@@ -593,13 +802,22 @@ function handleResult(
 
       participantInfo(
         result
-      )
+      ) +
+
+      '<button class="scan-again" onclick="resetScanner()">' +
+
+      'SCAN NEXT PARTICIPANT' +
+
+      '</button>'
 
     );
 
+    return;
+
   }
 
-  else if (
+
+  if (
     result.result ===
     "ALREADY RECORDED"
   ) {
@@ -608,17 +826,32 @@ function handleResult(
 
       "warning",
 
-      "⚠ ALREADY RECORDED",
+      "⚠ ALREADY ATTENDED",
 
       participantInfo(
         result
-      )
+      ) +
+
+      '<br>' +
+
+      '<strong>This participant has already been recorded.</strong>' +
+
+      '<br><br>' +
+
+      '<button class="scan-again" onclick="resetScanner()">' +
+
+      'SCAN NEXT PARTICIPANT' +
+
+      '</button>'
 
     );
 
+    return;
+
   }
 
-  else if (
+
+  if (
     result.result ===
     "SECURITY ERROR"
   ) {
@@ -629,13 +862,27 @@ function handleResult(
 
       "🔒 QR REJECTED",
 
-      result.message
+      escapeHtml(
+        result.message ||
+        "This QR code failed security verification."
+      ) +
+
+      '<br><br>' +
+
+      '<button class="scan-again" onclick="resetScanner()">' +
+
+      'SCAN AGAIN' +
+
+      '</button>'
 
     );
 
+    return;
+
   }
 
-  else if (
+
+  if (
     result.result ===
     "INVALID"
   ) {
@@ -646,77 +893,179 @@ function handleResult(
 
       "✕ INVALID QR",
 
-      result.message
+      escapeHtml(
+        result.message ||
+        "This participant QR code is invalid."
+      ) +
+
+      '<br><br>' +
+
+      '<button class="scan-again" onclick="resetScanner()">' +
+
+      'SCAN AGAIN' +
+
+      '</button>'
 
     );
 
-  }
-
-  else {
-
-    handleError(
-      result.message ||
-      "Unknown server error."
-    );
+    return;
 
   }
 
 
-  setTimeout(
-    resetScanner,
-    3000
+  handleError(
+
+    result.message ||
+    "Unknown server response."
+
   );
 
 }
 
 
 /* ============================================================
-   PARTICIPANT INFO
+   PARTICIPANT INFORMATION
 ============================================================ */
 
 function participantInfo(
   result
 ) {
 
-  return (
+  let html =
 
     '<div class="name">' +
 
     escapeHtml(
-      result.fullName
+      result.fullName ||
+      "Participant"
     ) +
 
     '</div>' +
 
+
     '<div class="info">' +
 
-    'Barangay: ' +
+    '<strong>Participant ID:</strong> ' +
 
     escapeHtml(
-      result.barangay
+      result.participantId ||
+      "—"
     ) +
 
     '</div>' +
 
+
     '<div class="info">' +
 
-    'Position: ' +
+    '<strong>Barangay:</strong> ' +
 
     escapeHtml(
-      result.position
+      result.barangay ||
+      "—"
     ) +
 
     '</div>' +
 
+
     '<div class="info">' +
 
-    'ID: ' +
+    '<strong>Position:</strong> ' +
 
     escapeHtml(
-      result.participantId
+      result.position ||
+      "—"
     ) +
 
-    '</div>'
+    '</div>';
+
+
+  if (
+    result.timestamp
+  ) {
+
+    html +=
+
+      '<div class="attendance-time">' +
+
+      'Attendance Time: ' +
+
+      escapeHtml(
+        formatDate(
+          result.timestamp
+        )
+      ) +
+
+      '</div>';
+
+  }
+
+
+  return html;
+
+}
+
+
+/* ============================================================
+   FORMAT DATE
+============================================================ */
+
+function formatDate(
+  value
+) {
+
+  if (
+    !value
+  ) {
+
+    return "—";
+
+  }
+
+
+  const date =
+    new Date(
+      value
+    );
+
+
+  if (
+    isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return String(
+      value
+    );
+
+  }
+
+
+  return date.toLocaleString(
+
+    undefined,
+
+    {
+
+      year:
+        "numeric",
+
+      month:
+        "short",
+
+      day:
+        "numeric",
+
+      hour:
+        "numeric",
+
+      minute:
+        "2-digit",
+
+      second:
+        "2-digit"
+
+    }
 
   );
 
@@ -724,7 +1073,7 @@ function participantInfo(
 
 
 /* ============================================================
-   ERROR
+   SYSTEM ERROR
 ============================================================ */
 
 function handleError(
@@ -732,22 +1081,30 @@ function handleError(
 ) {
 
   showStatus(
+
     "error",
-    "SYSTEM ERROR",
-    message
-  );
 
+    "⚠ SYSTEM ERROR",
 
-  setTimeout(
-    resetScanner,
-    3000
+    escapeHtml(
+      message
+    ) +
+
+    '<br><br>' +
+
+    '<button class="scan-again" onclick="resetScanner()">' +
+
+    'TRY AGAIN' +
+
+    '</button>'
+
   );
 
 }
 
 
 /* ============================================================
-   STATUS
+   SHOW STATUS
 ============================================================ */
 
 function showStatus(
@@ -770,30 +1127,52 @@ function showStatus(
   status.innerHTML =
 
     "<h2>" +
+
     title +
+
     "</h2>" +
 
     "<div>" +
+
     message +
+
     "</div>";
 
 }
 
 
 /* ============================================================
-   RESET
+   RESET SCANNER
 ============================================================ */
 
 function resetScanner() {
+
+  if (
+    resetTimer
+  ) {
+
+    clearTimeout(
+      resetTimer
+    );
+
+    resetTimer =
+      null;
+
+  }
+
 
   processing =
     false;
 
 
   showStatus(
+
     "info",
+
     "READY",
+
     "Scan a participant QR code."
+
   );
 
 }
@@ -807,7 +1186,9 @@ function escapeHtml(
   value
 ) {
 
-  return String(value)
+  return String(
+    value ?? ""
+  )
 
     .replace(
       /&/g,
@@ -842,8 +1223,15 @@ function escapeHtml(
 ============================================================ */
 
 window.addEventListener(
+
   "load",
-  startScanner
+
+  function() {
+
+    startScanner();
+
+  }
+
 );
 
 </script>
