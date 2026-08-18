@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -22,10 +23,6 @@ Attendance Checker
 
 <style>
 
-/* ============================================================
-   GLOBAL
-============================================================ */
-
 * {
   box-sizing: border-box;
 }
@@ -46,11 +43,6 @@ body {
 
 }
 
-
-/* ============================================================
-   HEADER
-============================================================ */
-
 .header {
 
   background:
@@ -63,7 +55,7 @@ body {
     center;
 
   padding:
-    22px 15px;
+    22px;
 
 }
 
@@ -73,7 +65,7 @@ body {
     0;
 
   font-size:
-    24px;
+    23px;
 
 }
 
@@ -87,18 +79,13 @@ body {
 
 }
 
-
-/* ============================================================
-   CONTAINER
-============================================================ */
-
 .container {
 
   width:
     100%;
 
   max-width:
-    520px;
+    500px;
 
   margin:
     auto;
@@ -107,11 +94,6 @@ body {
     20px;
 
 }
-
-
-/* ============================================================
-   SCANNER
-============================================================ */
 
 .scanner-box {
 
@@ -139,7 +121,7 @@ body {
 
 
 /* ============================================================
-   STATUS CARD
+   STATUS
 ============================================================ */
 
 .status {
@@ -148,10 +130,10 @@ body {
     20px;
 
   padding:
-    25px 20px;
+    20px;
 
   border-radius:
-    15px;
+    12px;
 
   background:
     white;
@@ -159,37 +141,12 @@ body {
   text-align:
     center;
 
-  box-shadow:
-    0 3px 12px
-    rgba(0,0,0,0.08);
-
-  transition:
-    0.2s;
-
 }
-
-.status h2 {
-
-  margin:
-    0 0 15px;
-
-  font-size:
-    22px;
-
-}
-
-
-/* ============================================================
-   STATUS COLORS
-============================================================ */
 
 .status.success {
 
   background:
     #dff5e1;
-
-  border:
-    2px solid #58a95f;
 
 }
 
@@ -198,18 +155,12 @@ body {
   background:
     #fff0c2;
 
-  border:
-    2px solid #e0b400;
-
 }
 
 .status.error {
 
   background:
     #ffe0e0;
-
-  border:
-    2px solid #d9534f;
 
 }
 
@@ -218,9 +169,6 @@ body {
   background:
     #e7f1ff;
 
-  border:
-    2px solid #6c9bd2;
-
 }
 
 .status.security {
@@ -228,70 +176,62 @@ body {
   background:
     #f7e4ff;
 
-  border:
-    2px solid #a64ac9;
-
 }
 
+.status h2 {
 
-/* ============================================================
-   PARTICIPANT INFORMATION
-============================================================ */
+  margin:
+    0 0 10px;
+
+}
 
 .name {
 
   font-size:
-    24px;
+    21px;
 
   font-weight:
     bold;
 
   margin-bottom:
-    15px;
+    10px;
 
 }
 
 .info {
 
   font-size:
-    15px;
-
-  margin:
-    7px 0;
-
-}
-
-.attendance-time {
-
-  margin-top:
-    15px;
-
-  font-size:
     14px;
 
-  font-weight:
-    bold;
+  margin:
+    5px;
 
 }
 
 
 /* ============================================================
-   SCAN AGAIN BUTTON
+   SCAN NEXT BUTTON
 ============================================================ */
 
-.scan-again {
+#scanNextButton {
+
+  display:
+    none;
+
+  width:
+    100%;
 
   margin-top:
-    20px;
+    15px;
 
   padding:
-    13px 25px;
+    15px;
 
   border:
     none;
 
   border-radius:
-    8px;
+    10px;
 
   background:
     #111;
@@ -300,7 +240,7 @@ body {
     white;
 
   font-size:
-    15px;
+    16px;
 
   font-weight:
     bold;
@@ -310,28 +250,17 @@ body {
 
 }
 
-.scan-again:hover {
+#scanNextButton:hover {
 
   opacity:
     0.85;
 
 }
 
+#scanNextButton:active {
 
-/* ============================================================
-   CAMERA ERROR
-============================================================ */
-
-.camera-help {
-
-  margin-top:
-    12px;
-
-  font-size:
-    13px;
-
-  color:
-    #666;
+  transform:
+    scale(0.98);
 
 }
 
@@ -345,21 +274,21 @@ body {
   .container {
 
     padding:
-      12px;
+      15px;
 
   }
 
-  .header h1 {
+  .scanner-box {
 
-    font-size:
-      21px;
+    padding:
+      10px;
 
   }
 
-  .name {
+  .status {
 
-    font-size:
-      21px;
+    padding:
+      18px;
 
   }
 
@@ -372,10 +301,6 @@ body {
 
 <body>
 
-
-<!-- ==========================================================
-     HEADER
-=========================================================== -->
 
 <div class="header">
 
@@ -393,20 +318,12 @@ Secure QR Attendance Scanner
 <div class="container">
 
 
-<!-- ==========================================================
-     SCANNER
-=========================================================== -->
-
 <div class="scanner-box">
 
 <div id="reader"></div>
 
 </div>
 
-
-<!-- ==========================================================
-     STATUS
-=========================================================== -->
 
 <div
   id="status"
@@ -424,49 +341,60 @@ Please allow camera access.
 </div>
 
 
+<button
+  id="scanNextButton"
+  onclick="scanNextParticipant()"
+>
+SCAN NEXT PARTICIPANT
+</button>
+
+
 </div>
 
 
 <script>
 
 
-/* ============================================================
-   APPS SCRIPT API
-============================================================ */
+/*
+==============================================================
+APPS SCRIPT API
+==============================================================
+*/
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
 
 
-/* ============================================================
-   VARIABLES
-============================================================ */
-
 let scanner = null;
 
 let processing = false;
 
-let resetTimer = null;
+let scannerRunning = false;
 
 
 /* ============================================================
-   START CAMERA
+   START CAMERA / SCANNER
 ============================================================ */
 
 function startScanner() {
+
+  if (
+    scannerRunning
+  ) {
+
+    return;
+
+  }
+
 
   if (
     !window.isSecureContext
   ) {
 
     showStatus(
-
       "error",
-
       "SECURITY ERROR",
-
       "Scanner must be opened through HTTPS."
-
     );
 
     return;
@@ -480,13 +408,9 @@ function startScanner() {
   ) {
 
     showStatus(
-
       "error",
-
       "CAMERA NOT SUPPORTED",
-
       "Your browser does not support camera access."
-
     );
 
     return;
@@ -494,10 +418,14 @@ function startScanner() {
   }
 
 
-  scanner =
-    new Html5Qrcode(
-      "reader"
-    );
+  if (!scanner) {
+
+    scanner =
+      new Html5Qrcode(
+        "reader"
+      );
+
+  }
 
 
   scanner.start(
@@ -535,7 +463,7 @@ function startScanner() {
 
       /*
        * Normal QR scanning failures
-       * are intentionally ignored.
+       * are ignored.
        */
 
     }
@@ -544,36 +472,36 @@ function startScanner() {
 
   .then(function() {
 
+    scannerRunning =
+      true;
+
+    processing =
+      false;
+
+
+    hideScanNextButton();
+
+
     showStatus(
-
       "info",
-
       "READY",
-
       "Scan a participant QR code."
-
     );
 
   })
 
   .catch(function(error) {
 
+    scannerRunning =
+      false;
+
+
     showStatus(
-
       "error",
-
       "CAMERA ERROR",
-
       error.name +
       ": " +
-      error.message +
-
-      '<div class="camera-help">' +
-
-      'Make sure Chrome has camera permission and try again.' +
-
-      '</div>'
-
+      error.message
     );
 
   });
@@ -614,7 +542,9 @@ function handleQRCode(
 
 
   /*
-   * Expected secure QR format:
+   * Make sure QR has secure format.
+   *
+   * Expected:
    *
    * PART-00001|signature
    */
@@ -627,23 +557,17 @@ function handleQRCode(
       true;
 
 
+    stopScanner();
+
+
     showStatus(
-
       "security",
-
-      "🔒 INVALID QR CODE",
-
-      "This QR code is not a secure participant QR code." +
-
-      '<br><br>' +
-
-      '<button class="scan-again" onclick="resetScanner()">' +
-
-      'SCAN AGAIN' +
-
-      '</button>'
-
+      "✕ INVALID QR",
+      "This QR code is not a secure participant QR code."
     );
+
+
+    showScanNextButton();
 
 
     return;
@@ -656,13 +580,9 @@ function handleQRCode(
 
 
   showStatus(
-
     "info",
-
     "CHECKING...",
-
-    "Verifying participant QR code..."
-
+    "Verifying secure participant QR..."
   );
 
 
@@ -715,9 +635,7 @@ function handleQRCode(
     function() {
 
       handleError(
-
         "Unable to contact the attendance server."
-
       );
 
 
@@ -732,6 +650,356 @@ function handleQRCode(
   document.body.appendChild(
     script
   );
+
+}
+
+
+/* ============================================================
+   STOP SCANNER
+============================================================ */
+
+function stopScanner() {
+
+  if (
+    !scanner ||
+    !scannerRunning
+  ) {
+
+    return Promise.resolve();
+
+  }
+
+
+  return scanner
+    .stop()
+
+    .then(function() {
+
+      scannerRunning =
+        false;
+
+    })
+
+    .catch(function(error) {
+
+      console.log(
+        "Scanner stop error:",
+        error
+      );
+
+      scannerRunning =
+        false;
+
+    });
+
+}
+
+
+/* ============================================================
+   SCAN NEXT PARTICIPANT
+============================================================ */
+
+function scanNextParticipant() {
+
+  if (
+    processing === false &&
+    scannerRunning === true
+  ) {
+
+    return;
+
+  }
+
+
+  hideScanNextButton();
+
+
+  processing =
+    false;
+
+
+  startScanner();
+
+}
+
+
+/* ============================================================
+   SHOW SCAN NEXT BUTTON
+============================================================ */
+
+function showScanNextButton() {
+
+  const button =
+    document.getElementById(
+      "scanNextButton"
+    );
+
+
+  button.style.display =
+    "block";
+
+}
+
+
+/* ============================================================
+   HIDE SCAN NEXT BUTTON
+============================================================ */
+
+function hideScanNextButton() {
+
+  const button =
+    document.getElementById(
+      "scanNextButton"
+    );
+
+
+  button.style.display =
+    "none";
+
+}
+
+
+/* ============================================================
+   RESULT
+============================================================ */
+
+function handleResult(
+  result
+) {
+
+  /*
+   * Stop scanning while
+   * displaying the result.
+   */
+
+  stopScanner();
+
+
+  if (
+    !result
+  ) {
+
+    handleError(
+      "No response received."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    result.result ===
+    "SUCCESS"
+  ) {
+
+    showStatus(
+
+      "success",
+
+      "✓ ATTENDANCE RECORDED",
+
+      participantInfo(
+        result
+      )
+
+    );
+
+  }
+
+  else if (
+    result.result ===
+    "ALREADY RECORDED"
+  ) {
+
+    showStatus(
+
+      "warning",
+
+      "⚠ ALREADY RECORDED",
+
+      participantInfo(
+        result
+      )
+
+    );
+
+  }
+
+  else if (
+    result.result ===
+    "SECURITY ERROR"
+  ) {
+
+    showStatus(
+
+      "security",
+
+      "🔒 QR REJECTED",
+
+      result.message
+
+    );
+
+  }
+
+  else if (
+    result.result ===
+    "INVALID"
+  ) {
+
+    showStatus(
+
+      "error",
+
+      "✕ INVALID QR",
+
+      result.message
+
+    );
+
+  }
+
+  else {
+
+    showStatus(
+
+      "error",
+
+      "SYSTEM ERROR",
+
+      result.message ||
+      "Unknown server error."
+
+    );
+
+  }
+
+
+  /*
+   * Show button instead of
+   * automatically scanning again.
+   */
+
+  processing =
+    true;
+
+
+  showScanNextButton();
+
+}
+
+
+/* ============================================================
+   PARTICIPANT INFO
+============================================================ */
+
+function participantInfo(
+  result
+) {
+
+  return (
+
+    '<div class="name">' +
+
+    escapeHtml(
+      result.fullName
+    ) +
+
+    '</div>' +
+
+    '<div class="info">' +
+
+    'Barangay: ' +
+
+    escapeHtml(
+      result.barangay
+    ) +
+
+    '</div>' +
+
+    '<div class="info">' +
+
+    'Position: ' +
+
+    escapeHtml(
+      result.position
+    ) +
+
+    '</div>' +
+
+    '<div class="info">' +
+
+    'ID: ' +
+
+    escapeHtml(
+      result.participantId
+    ) +
+
+    '</div>'
+
+  );
+
+}
+
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+function handleError(
+  message
+) {
+
+  stopScanner();
+
+
+  processing =
+    true;
+
+
+  showStatus(
+    "error",
+    "SYSTEM ERROR",
+    message
+  );
+
+
+  showScanNextButton();
+
+}
+
+
+/* ============================================================
+   STATUS
+============================================================ */
+
+function showStatus(
+  type,
+  title,
+  message
+) {
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  status.className =
+    "status " +
+    type;
+
+
+  status.innerHTML =
+
+    "<h2>" +
+    title +
+    "</h2>" +
+
+    "<div>" +
+    message +
+    "</div>";
 
 }
 
@@ -764,416 +1032,6 @@ function cleanupJsonp(
     );
 
   }
-
-}
-
-
-/* ============================================================
-   HANDLE RESULT
-============================================================ */
-
-function handleResult(
-  result
-) {
-
-  if (
-    !result
-  ) {
-
-    handleError(
-      "No response received from the attendance server."
-    );
-
-    return;
-
-  }
-
-
-  if (
-    result.result ===
-    "SUCCESS"
-  ) {
-
-    showStatus(
-
-      "success",
-
-      "✓ ATTENDANCE RECORDED",
-
-      participantInfo(
-        result
-      ) +
-
-      '<button class="scan-again" onclick="resetScanner()">' +
-
-      'SCAN NEXT PARTICIPANT' +
-
-      '</button>'
-
-    );
-
-    return;
-
-  }
-
-
-  if (
-    result.result ===
-    "ALREADY RECORDED"
-  ) {
-
-    showStatus(
-
-      "warning",
-
-      "⚠ ALREADY ATTENDED",
-
-      participantInfo(
-        result
-      ) +
-
-      '<br>' +
-
-      '<strong>This participant has already been recorded.</strong>' +
-
-      '<br><br>' +
-
-      '<button class="scan-again" onclick="resetScanner()">' +
-
-      'SCAN NEXT PARTICIPANT' +
-
-      '</button>'
-
-    );
-
-    return;
-
-  }
-
-
-  if (
-    result.result ===
-    "SECURITY ERROR"
-  ) {
-
-    showStatus(
-
-      "security",
-
-      "🔒 QR REJECTED",
-
-      escapeHtml(
-        result.message ||
-        "This QR code failed security verification."
-      ) +
-
-      '<br><br>' +
-
-      '<button class="scan-again" onclick="resetScanner()">' +
-
-      'SCAN AGAIN' +
-
-      '</button>'
-
-    );
-
-    return;
-
-  }
-
-
-  if (
-    result.result ===
-    "INVALID"
-  ) {
-
-    showStatus(
-
-      "error",
-
-      "✕ INVALID QR",
-
-      escapeHtml(
-        result.message ||
-        "This participant QR code is invalid."
-      ) +
-
-      '<br><br>' +
-
-      '<button class="scan-again" onclick="resetScanner()">' +
-
-      'SCAN AGAIN' +
-
-      '</button>'
-
-    );
-
-    return;
-
-  }
-
-
-  handleError(
-
-    result.message ||
-    "Unknown server response."
-
-  );
-
-}
-
-
-/* ============================================================
-   PARTICIPANT INFORMATION
-============================================================ */
-
-function participantInfo(
-  result
-) {
-
-  let html =
-
-    '<div class="name">' +
-
-    escapeHtml(
-      result.fullName ||
-      "Participant"
-    ) +
-
-    '</div>' +
-
-
-    '<div class="info">' +
-
-    '<strong>Participant ID:</strong> ' +
-
-    escapeHtml(
-      result.participantId ||
-      "—"
-    ) +
-
-    '</div>' +
-
-
-    '<div class="info">' +
-
-    '<strong>Barangay:</strong> ' +
-
-    escapeHtml(
-      result.barangay ||
-      "—"
-    ) +
-
-    '</div>' +
-
-
-    '<div class="info">' +
-
-    '<strong>Position:</strong> ' +
-
-    escapeHtml(
-      result.position ||
-      "—"
-    ) +
-
-    '</div>';
-
-
-  if (
-    result.timestamp
-  ) {
-
-    html +=
-
-      '<div class="attendance-time">' +
-
-      'Attendance Time: ' +
-
-      escapeHtml(
-        formatDate(
-          result.timestamp
-        )
-      ) +
-
-      '</div>';
-
-  }
-
-
-  return html;
-
-}
-
-
-/* ============================================================
-   FORMAT DATE
-============================================================ */
-
-function formatDate(
-  value
-) {
-
-  if (
-    !value
-  ) {
-
-    return "—";
-
-  }
-
-
-  const date =
-    new Date(
-      value
-    );
-
-
-  if (
-    isNaN(
-      date.getTime()
-    )
-  ) {
-
-    return String(
-      value
-    );
-
-  }
-
-
-  return date.toLocaleString(
-
-    undefined,
-
-    {
-
-      year:
-        "numeric",
-
-      month:
-        "short",
-
-      day:
-        "numeric",
-
-      hour:
-        "numeric",
-
-      minute:
-        "2-digit",
-
-      second:
-        "2-digit"
-
-    }
-
-  );
-
-}
-
-
-/* ============================================================
-   SYSTEM ERROR
-============================================================ */
-
-function handleError(
-  message
-) {
-
-  showStatus(
-
-    "error",
-
-    "⚠ SYSTEM ERROR",
-
-    escapeHtml(
-      message
-    ) +
-
-    '<br><br>' +
-
-    '<button class="scan-again" onclick="resetScanner()">' +
-
-    'TRY AGAIN' +
-
-    '</button>'
-
-  );
-
-}
-
-
-/* ============================================================
-   SHOW STATUS
-============================================================ */
-
-function showStatus(
-  type,
-  title,
-  message
-) {
-
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-
-  status.className =
-    "status " +
-    type;
-
-
-  status.innerHTML =
-
-    "<h2>" +
-
-    title +
-
-    "</h2>" +
-
-    "<div>" +
-
-    message +
-
-    "</div>";
-
-}
-
-
-/* ============================================================
-   RESET SCANNER
-============================================================ */
-
-function resetScanner() {
-
-  if (
-    resetTimer
-  ) {
-
-    clearTimeout(
-      resetTimer
-    );
-
-    resetTimer =
-      null;
-
-  }
-
-
-  processing =
-    false;
-
-
-  showStatus(
-
-    "info",
-
-    "READY",
-
-    "Scan a participant QR code."
-
-  );
 
 }
 
@@ -1223,15 +1081,12 @@ function escapeHtml(
 ============================================================ */
 
 window.addEventListener(
-
   "load",
-
   function() {
 
     startScanner();
 
   }
-
 );
 
 </script>
