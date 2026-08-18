@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -11,26 +10,29 @@
   content="width=device-width, initial-scale=1.0"
 >
 
-<title>
-Attendance Checker
-</title>
+<title>Attendance Checker</title>
 
-
-<script
-  src="https://unpkg.com/html5-qrcode"
-></script>
-
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
+
+/* ============================================================
+   GLOBAL
+============================================================ */
 
 * {
   box-sizing: border-box;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
 
 body {
-
-  margin: 0;
 
   font-family:
     Arial,
@@ -65,7 +67,6 @@ body {
 
 }
 
-
 .header h1 {
 
   margin:
@@ -75,7 +76,6 @@ body {
     23px;
 
 }
-
 
 .header p {
 
@@ -89,7 +89,7 @@ body {
 
 
 /* ============================================================
-   CONTAINER
+   MAIN CONTAINER
 ============================================================ */
 
 .container {
@@ -136,7 +136,6 @@ body {
 
 }
 
-
 .session-label {
 
   font-size:
@@ -153,7 +152,6 @@ body {
 
 }
 
-
 .session-name {
 
   font-size:
@@ -166,7 +164,6 @@ body {
     7px;
 
 }
-
 
 .session-id {
 
@@ -181,7 +178,6 @@ body {
 
 }
 
-
 .session-buttons {
 
   display:
@@ -194,7 +190,6 @@ body {
     15px;
 
 }
-
 
 .session-button {
 
@@ -224,7 +219,6 @@ body {
 
 }
 
-
 .session-button:active {
 
   transform:
@@ -253,7 +247,6 @@ body {
     rgba(0,0,0,0.12);
 
 }
-
 
 #reader {
 
@@ -286,14 +279,12 @@ body {
 
 }
 
-
 .status.success {
 
   background:
     #dff5e1;
 
 }
-
 
 .status.warning {
 
@@ -302,14 +293,12 @@ body {
 
 }
 
-
 .status.error {
 
   background:
     #ffe0e0;
 
 }
-
 
 .status.info {
 
@@ -318,7 +307,6 @@ body {
 
 }
 
-
 .status.security {
 
   background:
@@ -326,14 +314,12 @@ body {
 
 }
 
-
 .status h2 {
 
   margin:
     0 0 10px;
 
 }
-
 
 .name {
 
@@ -347,7 +333,6 @@ body {
     10px;
 
 }
-
 
 .info {
 
@@ -401,7 +386,6 @@ body {
 
 }
 
-
 .next-button:active {
 
   transform:
@@ -422,8 +406,14 @@ body {
   inset:
     0;
 
+  width:
+    100%;
+
+  height:
+    100%;
+
   background:
-    rgba(0,0,0,0.55);
+    rgba(0,0,0,0.60);
 
   display:
     none;
@@ -435,7 +425,7 @@ body {
     center;
 
   padding:
-    20px;
+    15px;
 
   z-index:
     1000;
@@ -443,7 +433,14 @@ body {
 }
 
 
+/* ============================================================
+   MODAL CONTENT
+============================================================ */
+
 .modal-content {
+
+  position:
+    relative;
 
   width:
     100%;
@@ -451,21 +448,56 @@ body {
   max-width:
     430px;
 
+  max-height:
+    calc(100vh - 30px);
+
   background:
     white;
 
   border-radius:
     15px;
 
-  padding:
-    22px;
-
   box-shadow:
     0 10px 40px
-    rgba(0,0,0,0.25);
+    rgba(0,0,0,0.30);
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  overflow:
+    hidden;
 
 }
 
+
+/* ============================================================
+   MODAL HEADER
+============================================================ */
+
+.modal-header {
+
+  position:
+    relative;
+
+  flex-shrink:
+    0;
+
+  padding:
+    20px;
+
+  padding-right:
+    55px;
+
+  border-bottom:
+    1px solid #eee;
+
+  background:
+    white;
+
+}
 
 .modal-title {
 
@@ -475,11 +507,141 @@ body {
   font-weight:
     bold;
 
-  margin-bottom:
-    15px;
+  margin:
+    0;
 
 }
 
+
+/* ============================================================
+   CLOSE BUTTON
+============================================================ */
+
+.close-button {
+
+  position:
+    absolute;
+
+  top:
+    12px;
+
+  right:
+    12px;
+
+  width:
+    40px;
+
+  height:
+    40px;
+
+  border:
+    none;
+
+  border-radius:
+    50%;
+
+  background:
+    #f0f0f0;
+
+  color:
+    #333;
+
+  font-size:
+    25px;
+
+  line-height:
+    40px;
+
+  text-align:
+    center;
+
+  cursor:
+    pointer;
+
+}
+
+.close-button:hover {
+
+  background:
+    #ddd;
+
+}
+
+.close-button:active {
+
+  transform:
+    scale(0.95);
+
+}
+
+
+/* ============================================================
+   SESSION LIST
+============================================================ */
+
+.session-list {
+
+  flex:
+    1;
+
+  min-height:
+    0;
+
+  overflow-y:
+    auto;
+
+  overflow-x:
+    hidden;
+
+  padding:
+    15px 20px;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+}
+
+
+/* Scrollbar */
+
+.session-list::-webkit-scrollbar {
+
+  width:
+    7px;
+
+}
+
+.session-list::-webkit-scrollbar-track {
+
+  background:
+    #f1f1f1;
+
+  border-radius:
+    10px;
+
+}
+
+.session-list::-webkit-scrollbar-thumb {
+
+  background:
+    #aaa;
+
+  border-radius:
+    10px;
+
+}
+
+.session-list::-webkit-scrollbar-thumb:hover {
+
+  background:
+    #777;
+
+}
+
+
+/* ============================================================
+   SESSION OPTION
+============================================================ */
 
 .session-option {
 
@@ -496,7 +658,7 @@ body {
     10px;
 
   border:
-    1px solid #ddd;
+    2px solid #ddd;
 
   border-radius:
     10px;
@@ -510,8 +672,24 @@ body {
   cursor:
     pointer;
 
+  transition:
+    0.15s;
+
 }
 
+.session-option:last-child {
+
+  margin-bottom:
+    0;
+
+}
+
+.session-option:hover {
+
+  background:
+    #f7f7f7;
+
+}
 
 .session-option.active {
 
@@ -523,14 +701,15 @@ body {
 
 }
 
-
 .option-name {
 
   font-weight:
     bold;
 
-}
+  font-size:
+    16px;
 
+}
 
 .option-id {
 
@@ -541,12 +720,19 @@ body {
     #777;
 
   margin-top:
-    4px;
+    5px;
 
 }
 
 
-.modal-buttons {
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
+
+.modal-footer {
+
+  flex-shrink:
+    0;
 
   display:
     flex;
@@ -554,11 +740,16 @@ body {
   gap:
     10px;
 
-  margin-top:
-    15px;
+  padding:
+    15px 20px;
+
+  border-top:
+    1px solid #eee;
+
+  background:
+    white;
 
 }
-
 
 .modal-button {
 
@@ -582,14 +773,22 @@ body {
 
 }
 
-
 .cancel-button {
 
   background:
     #ddd;
 
+  color:
+    #222;
+
 }
 
+.cancel-button:hover {
+
+  background:
+    #ccc;
+
+}
 
 .activate-button {
 
@@ -601,13 +800,27 @@ body {
 
 }
 
+.activate-button:hover {
+
+  background:
+    #333;
+
+}
+
+.modal-button:active {
+
+  transform:
+    scale(0.98);
+
+}
+
 
 /* ============================================================
    MOBILE
 ============================================================ */
 
 @media (
-  max-width: 400px
+  max-width: 500px
 ) {
 
   .container {
@@ -623,6 +836,92 @@ body {
       19px;
 
   }
+
+  .modal {
+
+    align-items:
+      flex-end;
+
+    padding:
+      0;
+
+  }
+
+  .modal-content {
+
+    max-width:
+      none;
+
+    width:
+      100%;
+
+    max-height:
+      90vh;
+
+    border-radius:
+      18px 18px 0 0;
+
+  }
+
+  .modal-header {
+
+    padding:
+      18px;
+
+    padding-right:
+      55px;
+
+  }
+
+  .session-list {
+
+    padding:
+      12px 15px;
+
+  }
+
+  .modal-footer {
+
+    padding:
+      12px 15px;
+
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL SCREENS
+============================================================ */
+
+@media (
+  max-height: 600px
+) {
+
+  .modal-content {
+
+    max-height:
+      calc(100vh - 10px);
+
+  }
+
+}
+
+
+/* ============================================================
+   NO SESSIONS MESSAGE
+============================================================ */
+
+.no-sessions {
+
+  text-align:
+    center;
+
+  color:
+    #777;
+
+  padding:
+    30px 10px;
 
 }
 
@@ -749,26 +1048,52 @@ SCAN NEXT PARTICIPANT
 <div
   id="sessionModal"
   class="modal"
+  onclick="handleModalBackgroundClick(event)"
 >
 
-<div class="modal-content">
+<div
+  class="modal-content"
+  onclick="event.stopPropagation()"
+>
 
+
+<!-- MODAL HEADER -->
+
+<div class="modal-header">
 
 <div class="modal-title">
 SELECT ATTENDANCE SESSION
 </div>
 
 
+<button
+  type="button"
+  class="close-button"
+  onclick="closeSessionSelector()"
+  aria-label="Close"
+>
+&times;
+</button>
+
+</div>
+
+
+<!-- SESSION LIST -->
+
 <div
   id="sessionList"
+  class="session-list"
 >
 Loading sessions...
 </div>
 
 
-<div class="modal-buttons">
+<!-- MODAL FOOTER -->
+
+<div class="modal-footer">
 
 <button
+  type="button"
   class="modal-button cancel-button"
   onclick="closeSessionSelector()"
 >
@@ -777,6 +1102,7 @@ CANCEL
 
 
 <button
+  type="button"
   class="modal-button activate-button"
   onclick="activateSelectedSession()"
 >
@@ -794,43 +1120,34 @@ ACTIVATE SESSION
 <script>
 
 
-/*
-==============================================================
-APPS SCRIPT API
-==============================================================
-*/
+/* ============================================================
+   APPS SCRIPT API
+============================================================ */
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
 
 
-/*
-==============================================================
-GLOBAL VARIABLES
-==============================================================
-*/
+/* ============================================================
+   GLOBAL VARIABLES
+============================================================ */
 
 let scanner =
   null;
 
-
 let processing =
   false;
 
-
 let selectedSessionId =
   "";
-
 
 let sessions =
   [];
 
 
-/*
-==============================================================
-LOAD CURRENT SESSION
-==============================================================
-*/
+/* ============================================================
+   LOAD SESSIONS
+============================================================ */
 
 function loadSessions() {
 
@@ -882,8 +1199,10 @@ function loadSessions() {
         showStatus(
           "error",
           "SESSION ERROR",
-          result.message ||
-          "Unable to load sessions."
+          result &&
+          result.message
+            ? result.message
+            : "Unable to load sessions."
         );
 
       }
@@ -926,11 +1245,9 @@ function loadSessions() {
 }
 
 
-/*
-==============================================================
-UPDATE CURRENT SESSION
-==============================================================
-*/
+/* ============================================================
+   UPDATE CURRENT SESSION
+============================================================ */
 
 function updateCurrentSession(
   session
@@ -939,22 +1256,22 @@ function updateCurrentSession(
   document.getElementById(
     "currentSessionName"
   ).textContent =
-    session.sessionName;
+    session.sessionName ||
+    "No Active Session";
 
 
   document.getElementById(
     "currentSessionId"
   ).textContent =
-    session.sessionId;
+    session.sessionId ||
+    "";
 
 }
 
 
-/*
-==============================================================
-OPEN SESSION SELECTOR
-==============================================================
-*/
+/* ============================================================
+   OPEN SESSION SELECTOR
+============================================================ */
 
 function openSessionSelector() {
 
@@ -983,10 +1300,14 @@ function openSessionSelector() {
   ) {
 
     list.innerHTML =
-      "<p>No sessions available.</p>";
+      '<div class="no-sessions">' +
+      'No sessions available.' +
+      '</div>';
+
 
     modal.style.display =
       "flex";
+
 
     return;
 
@@ -1002,9 +1323,17 @@ function openSessionSelector() {
         );
 
 
+      button.type =
+        "button";
+
+
       button.className =
         "session-option";
 
+
+      /*
+       * Mark currently active session.
+       */
 
       if (
         session.status ===
@@ -1086,11 +1415,9 @@ function openSessionSelector() {
 }
 
 
-/*
-==============================================================
-CLOSE SESSION SELECTOR
-==============================================================
-*/
+/* ============================================================
+   CLOSE SESSION SELECTOR
+============================================================ */
 
 function closeSessionSelector() {
 
@@ -1099,14 +1426,70 @@ function closeSessionSelector() {
   ).style.display =
     "none";
 
+
+  selectedSessionId =
+    "";
+
 }
 
 
-/*
-==============================================================
-ACTIVATE SELECTED SESSION
-==============================================================
-*/
+/* ============================================================
+   CLICK OUTSIDE MODAL
+============================================================ */
+
+function handleModalBackgroundClick(
+  event
+) {
+
+  if (
+    event.target.id ===
+    "sessionModal"
+  ) {
+
+    closeSessionSelector();
+
+  }
+
+}
+
+
+/* ============================================================
+   ESC KEY CLOSE MODAL
+============================================================ */
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      const modal =
+        document.getElementById(
+          "sessionModal"
+        );
+
+
+      if (
+        modal.style.display ===
+        "flex"
+      ) {
+
+        closeSessionSelector();
+
+      }
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   ACTIVATE SELECTED SESSION
+============================================================ */
 
 function activateSelectedSession() {
 
@@ -1187,8 +1570,10 @@ function activateSelectedSession() {
         showStatus(
           "error",
           "SESSION ERROR",
-          result.message ||
-          "Unable to activate session."
+          result &&
+          result.message
+            ? result.message
+            : "Unable to activate session."
         );
 
       }
@@ -1231,11 +1616,9 @@ function activateSelectedSession() {
 }
 
 
-/*
-==============================================================
-START CAMERA
-==============================================================
-*/
+/* ============================================================
+   START CAMERA
+============================================================ */
 
 function startScanner() {
 
@@ -1310,7 +1693,7 @@ function startScanner() {
     function(errorMessage) {
 
       /*
-       * Normal scanning failures
+       * Normal scanning errors
        * are ignored.
        */
 
@@ -1318,36 +1701,38 @@ function startScanner() {
 
   )
 
-  .then(function() {
+  .then(
+    function() {
 
-    showStatus(
-      "info",
-      "READY",
-      "Scan a participant QR code."
-    );
+      showStatus(
+        "info",
+        "READY",
+        "Scan a participant QR code."
+      );
 
-  })
+    }
+  )
 
-  .catch(function(error) {
+  .catch(
+    function(error) {
 
-    showStatus(
-      "error",
-      "CAMERA ERROR",
-      error.name +
-      ": " +
-      error.message
-    );
+      showStatus(
+        "error",
+        "CAMERA ERROR",
+        error.name +
+        ": " +
+        error.message
+      );
 
-  });
+    }
+  );
 
 }
 
 
-/*
-==============================================================
-HANDLE QR CODE
-==============================================================
-*/
+/* ============================================================
+   HANDLE QR CODE
+============================================================ */
 
 function handleQRCode(
   qrData
@@ -1378,7 +1763,8 @@ function handleQRCode(
 
 
   if (
-    qrData.indexOf("|") === -1
+    qrData.indexOf("|") ===
+    -1
   ) {
 
     processing =
@@ -1480,11 +1866,9 @@ function handleQRCode(
 }
 
 
-/*
-==============================================================
-RESULT
-==============================================================
-*/
+/* ============================================================
+   HANDLE RESULT
+============================================================ */
 
 function handleResult(
   result
@@ -1587,20 +1971,14 @@ function handleResult(
   }
 
 
-  /*
-   * Show Scan Next Participant button.
-   */
-
   showNextButton();
 
 }
 
 
-/*
-==============================================================
-PARTICIPANT INFO
-==============================================================
-*/
+/* ============================================================
+   PARTICIPANT INFO
+============================================================ */
 
 function participantInfo(
   result
@@ -1664,11 +2042,9 @@ function participantInfo(
 }
 
 
-/*
-==============================================================
-ERROR
-==============================================================
-*/
+/* ============================================================
+   ERROR
+============================================================ */
 
 function handleError(
   message
@@ -1686,11 +2062,9 @@ function handleError(
 }
 
 
-/*
-==============================================================
-STATUS
-==============================================================
-*/
+/* ============================================================
+   STATUS
+============================================================ */
 
 function showStatus(
   type,
@@ -1722,11 +2096,9 @@ function showStatus(
 }
 
 
-/*
-==============================================================
-SHOW NEXT BUTTON
-==============================================================
-*/
+/* ============================================================
+   SHOW NEXT BUTTON
+============================================================ */
 
 function showNextButton() {
 
@@ -1742,11 +2114,9 @@ function showNextButton() {
 }
 
 
-/*
-==============================================================
-SCAN NEXT PARTICIPANT
-==============================================================
-*/
+/* ============================================================
+   SCAN NEXT PARTICIPANT
+============================================================ */
 
 function scanNextParticipant() {
 
@@ -1773,11 +2143,9 @@ function scanNextParticipant() {
 }
 
 
-/*
-==============================================================
-CLEAN JSONP
-==============================================================
-*/
+/* ============================================================
+   CLEAN JSONP
+============================================================ */
 
 function cleanupJsonp(
   callbackName,
@@ -1809,11 +2177,9 @@ function cleanupJsonp(
 }
 
 
-/*
-==============================================================
-ESCAPE HTML
-==============================================================
-*/
+/* ============================================================
+   ESCAPE HTML
+============================================================ */
 
 function escapeHtml(
   value
@@ -1849,11 +2215,9 @@ function escapeHtml(
 }
 
 
-/*
-==============================================================
-START
-==============================================================
-*/
+/* ============================================================
+   START APPLICATION
+============================================================ */
 
 window.addEventListener(
   "load",
@@ -1867,7 +2231,6 @@ window.addEventListener(
 );
 
 </script>
-
 
 </body>
 
