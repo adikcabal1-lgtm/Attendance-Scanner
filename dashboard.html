@@ -2462,6 +2462,16 @@ document.addEventListener(
    ACTIVATE / VIEW SELECTED SESSION
 ============================================================ */
 
+
+/* ============================================================
+   VIEW SELECTED SESSION
+
+   IMPORTANT:
+   This DOES NOT activate the session.
+
+   It only tells the dashboard which session to display.
+============================================================ */
+
 function activateSelectedSession() {
 
   if (
@@ -2483,36 +2493,57 @@ function activateSelectedSession() {
 
         return String(
           session.sessionId
-        ) ===
+        ).trim() ===
         String(
           selectedSessionId
-        );
+        ).trim();
 
       }
     );
 
 
   if (
-    selected
+    !selected
   ) {
 
-    updateCurrentSession(
-      selected
+    alert(
+      "Selected session was not found."
     );
+
+    return;
 
   }
 
+
+  /*
+   * Immediately display the selected session.
+   */
+
+  updateCurrentSession(
+    selected
+  );
+
+
+  /*
+   * Close modal.
+   */
 
   closeSessionSelector();
 
 
   /*
-   * Load dashboard using selected session.
+   * Load attendance records for THIS session.
+   *
+   * loadDashboard() will send:
+   *
+   * ?action=dashboard&sessionId=...
    */
 
   loadDashboard();
 
 }
+
+
 
 
 /* ============================================================
@@ -2666,206 +2697,7 @@ function loadDashboard() {
    HANDLE DASHBOARD RESULT
 ============================================================ */
 
-function handleDashboardResult(result) {
-
-  console.log(
-    "Dashboard response:",
-    result
-  );
-
-
-  if (
-    !result ||
-    result.success !== true
-  ) {
-
-    showError(
-      result &&
-      result.message
-        ? result.message
-        : "Unable to load dashboard."
-    );
-
-    return;
-
-  }
-
-
-  /* ==========================================================
-     CURRENT SESSION
-  ========================================================== */
-
-  if (
-    result.activeSession &&
-    result.activeSession.sessionId
-  ) {
-
-    activeSession =
-      result.activeSession;
-
-
-    selectedSessionId =
-      result.activeSession.sessionId;
-
-
-    document.getElementById(
-      "currentSessionName"
-    ).textContent =
-      result.activeSession.sessionName ||
-      "No Active Session";
-
-
-    document.getElementById(
-      "currentSessionId"
-    ).textContent =
-      result.activeSession.sessionId ||
-      "—";
-
-
-    document.getElementById(
-      "printSession"
-    ).textContent =
-      result.activeSession.sessionName ||
-      "—";
-
-  }
-
-  else {
-
-    document.getElementById(
-      "currentSessionName"
-    ).textContent =
-      "No Active Session";
-
-
-    document.getElementById(
-      "currentSessionId"
-    ).textContent =
-      "—";
-
-
-    document.getElementById(
-      "printSession"
-    ).textContent =
-      "—";
-
-  }
-
-
-  /* ==========================================================
-     SUMMARY
-  ========================================================== */
-
-  const summary =
-    result.summary || {};
-
-
-  const totalRegistered =
-    Number(
-      summary.totalRegistered || 0
-    );
-
-
-  const totalAttended =
-    Number(
-      summary.totalAttended || 0
-    );
-
-
-  const totalAbsent =
-    Number(
-      summary.totalAbsent !== undefined
-        ? summary.totalAbsent
-        : Math.max(
-            totalRegistered -
-            totalAttended,
-            0
-          )
-    );
-
-
-  let attendanceRate =
-    Number(
-      summary.attendanceRate || 0
-    );
-
-
-  if (
-    attendanceRate > 0 &&
-    attendanceRate <= 1
-  ) {
-
-    attendanceRate *=
-      100;
-
-  }
-
-
-  /* ==========================================================
-     PARTICIPANTS
-  ========================================================== */
-
-  participants =
-    Array.isArray(
-      result.participants
-    )
-      ? result.participants
-      : [];
-
-
-  /* ==========================================================
-     UPDATE STATISTICS
-  ========================================================== */
-
-  document.getElementById(
-    "totalRegistered"
-  ).textContent =
-    totalRegistered;
-
-
-  document.getElementById(
-    "totalAttended"
-  ).textContent =
-    totalAttended;
-
-
-  document.getElementById(
-    "totalAbsent"
-  ).textContent =
-    totalAbsent;
-
-
-  document.getElementById(
-    "attendancePercentage"
-  ).textContent =
-    attendanceRate.toFixed(2) +
-    "%";
-
-
-  /* ==========================================================
-     LAST UPDATED
-  ========================================================== */
-
-  document.getElementById(
-    "lastUpdated"
-  ).textContent =
-    "Last updated: " +
-    (
-      result.updated
-        ? formatDate(
-            result.updated
-          )
-        : new Date().toLocaleString()
-    );
-
-
-  /* ==========================================================
-     RENDER
-  ========================================================== */
-
-  applyFilters();
-
-}
+/* ============================================================ HANDLE DASHBOARD RESULT ============================================================ */ function handleDashboardResult( result ) { console.log( "Dashboard response:", result ); if ( !result || result.success !== true ) { showError( result && result.message ? result.message : "Unable to load dashboard." ); return; } /* ---------------------------------------------------------- UPDATE THE SESSION BEING VIEWED IMPORTANT: Use result.session here. Do NOT replace it with activeSession. ---------------------------------------------------------- */ if ( result.session ) { updateCurrentSession( result.session ); } /* * Keep track of the actual active session separately. * * This is useful for the session selector, * but it must NOT overwrite the session being viewed. */ if ( result.activeSession ) { activeSession = result.activeSession; } /* ---------------------------------------------------------- SUMMARY ---------------------------------------------------------- */ const summary = result.summary || {}; const totalRegistered = summary.totalRegistered !== undefined ? Number( summary.totalRegistered ) : 0; const totalAttended = summary.totalAttended !== undefined ? Number( summary.totalAttended ) : 0; const totalAbsent = summary.totalAbsent !== undefined ? Number( summary.totalAbsent ) : Math.max( totalRegistered - totalAttended, 0 ); let attendanceRate = summary.attendanceRate !== undefined ? Number( summary.attendanceRate ) : totalRegistered > 0 ? ( totalAttended / totalRegistered ) * 100 : 0; /* * Handle decimal format. * * Example: * 0.75 becomes 75%. */ if ( attendanceRate > 0 && attendanceRate <= 1 ) { attendanceRate *= 100; } /* ---------------------------------------------------------- PARTICIPANTS ---------------------------------------------------------- */ participants = Array.isArray( result.participants ) ? result.participants : []; /* ---------------------------------------------------------- UPDATE STATISTICS ---------------------------------------------------------- */ document.getElementById( "totalRegistered" ).textContent = totalRegistered; document.getElementById( "totalAttended" ).textContent = totalAttended; document.getElementById( "totalAbsent" ).textContent = totalAbsent; document.getElementById( "attendancePercentage" ).textContent = attendanceRate.toFixed( 2 ) + "%"; /* ---------------------------------------------------------- LAST UPDATED ---------------------------------------------------------- */ document.getElementById( "lastUpdated" ).textContent = "Last updated: " + ( result.updated ? formatDate( result.updated ) : new Date().toLocaleString() ); /* ---------------------------------------------------------- APPLY FILTERS ---------------------------------------------------------- */ applyFilters(); }
 
 
 /* ============================================================
