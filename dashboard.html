@@ -1772,9 +1772,17 @@ let dashboardLoading =
    LOAD SESSIONS
 ============================================================ */
 
-function loadSessions(
-  onComplete
-) {
+function loadSessions() {
+
+  const list =
+    document.getElementById(
+      "sessionList"
+    );
+
+
+  list.innerHTML =
+    '<div class="loading">Loading sessions...</div>';
+
 
   const callbackName =
     "sessionsCallback_" +
@@ -1788,121 +1796,278 @@ function loadSessions(
     callbackName;
 
 
-  let script =
+  console.log(
+    "Loading sessions:",
+    url
+  );
+
+
+  const script =
     document.createElement(
       "script"
     );
 
 
+  let completed =
+    false;
+
+
+  function finish() {
+
+    if (completed) {
+      return;
+    }
+
+    completed = true;
+
+
+    try {
+
+      delete window[
+        callbackName
+      ];
+
+    }
+
+    catch (e) {}
+
+
+    if (
+      script &&
+      script.parentNode
+    ) {
+
+      script.parentNode.removeChild(
+        script
+      );
+
+    }
+
+  }
+
+
   window[callbackName] =
     function(result) {
 
-      try {
-
-        if (
-          result &&
-          result.success === true
-        ) {
-
-          sessions =
-            Array.isArray(
-              result.sessions
-            )
-              ? result.sessions
-              : [];
+      console.log(
+        "Sessions response:",
+        result
+      );
 
 
-          /*
-           * Get the active session
-           * returned by Apps Script.
-           */
-
-          if (
-            result.activeSession
-          ) {
-
-            activeSession =
-              result.activeSession;
+      finish();
 
 
-            selectedSessionId =
-              result.activeSession.sessionId;
+      if (
+        !result
+      ) {
 
+        list.innerHTML =
+          '<div class="loading">' +
+          'No response received from attendance system.' +
+          '</div>';
 
-            updateCurrentSession(
-              result.activeSession
-            );
-
-          }
-
-          else {
-
-            /*
-             * No active session.
-             */
-
-            activeSession =
-              null;
-
-
-            selectedSessionId =
-              "";
-
-
-            updateCurrentSession({
-
-              sessionId:
-                "",
-
-              sessionName:
-                "No Active Session"
-
-            });
-
-          }
-
-        }
-
-        else {
-
-          console.error(
-            "Session loading error:",
-            result
-          );
-
-        }
+        return;
 
       }
 
-      catch (error) {
 
-        console.error(
-          "Session processing error:",
-          error
+      if (
+        result.success !== true
+      ) {
+
+        list.innerHTML =
+          '<div class="loading">' +
+          escapeHtml(
+            result.message ||
+            "Unable to load sessions."
+          ) +
+          '</div>';
+
+        return;
+
+      }
+
+
+      sessions =
+        Array.isArray(
+          result.sessions
+        )
+          ? result.sessions
+          : [];
+
+
+      /*
+       * Save active session.
+       */
+
+      if (
+        result.activeSession &&
+        result.activeSession.sessionId
+      ) {
+
+        activeSession =
+          result.activeSession;
+
+
+        selectedSessionId =
+          result.activeSession.sessionId;
+
+
+        updateCurrentSession(
+          result.activeSession
         );
 
       }
 
 
-      cleanup(
-        callbackName,
-        script
-      );
-
-
       /*
-       * Tell the caller that
-       * session loading is finished.
+       * No sessions.
        */
 
       if (
-        typeof onComplete ===
-        "function"
+        sessions.length === 0
       ) {
 
-        onComplete();
+        list.innerHTML =
+          '<div class="loading">' +
+          'No attendance sessions available.' +
+          '</div>';
+
+        return;
 
       }
+
+
+      /*
+       * Build session list.
+       */
+
+      list.innerHTML =
+        "";
+
+
+      sessions.forEach(
+        function(session) {
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.type =
+            "button";
+
+
+          button.className =
+            "session-option";
+
+
+          /*
+           * Highlight selected session.
+           */
+
+          if (
+            String(
+              session.sessionId
+            ) ===
+            String(
+              selectedSessionId
+            )
+          ) {
+
+            button.classList.add(
+              "active"
+            );
+
+          }
+
+
+          const status =
+            String(
+              session.status ||
+              ""
+            )
+              .trim()
+              .toUpperCase();
+
+
+          const statusClass =
+            status === "ACTIVE"
+              ? "active-status"
+              : "closed-status";
+
+
+          button.innerHTML =
+
+            '<div class="option-name">' +
+
+            escapeHtml(
+              session.sessionName ||
+              "Unnamed Session"
+            ) +
+
+            '</div>' +
+
+            '<div class="option-id">' +
+
+            escapeHtml(
+              session.sessionId ||
+              ""
+            ) +
+
+            '</div>' +
+
+            '<span class="option-status ' +
+            statusClass +
+            '">' +
+
+            escapeHtml(
+              status ||
+              "UNKNOWN"
+            ) +
+
+            '</span>';
+
+
+          button.addEventListener(
+            "click",
+            function() {
+
+              selectedSessionId =
+                session.sessionId;
+
+
+              document
+                .querySelectorAll(
+                  ".session-option"
+                )
+                .forEach(
+                  function(item) {
+
+                    item.classList.remove(
+                      "active"
+                    );
+
+                  }
+                );
+
+
+              button.classList.add(
+                "active"
+              );
+
+            }
+          );
+
+
+          list.appendChild(
+            button
+          );
+
+        }
+      );
 
     };
 
@@ -1910,27 +2075,54 @@ function loadSessions(
   script.onerror =
     function() {
 
+      finish();
+
+
       console.error(
-        "Unable to load sessions."
+        "Session JSONP request failed."
       );
 
 
-      cleanup(
-        callbackName,
-        script
-      );
-
-
-      if (
-        typeof onComplete ===
-        "function"
-      ) {
-
-        onComplete();
-
-      }
+      list.innerHTML =
+        '<div class="loading">' +
+        'Unable to connect to the attendance system while loading sessions.' +
+        '</div>';
 
     };
+
+
+  /*
+   * Timeout protection.
+   *
+   * This prevents the modal from remaining
+   * permanently stuck on "Loading sessions..."
+   */
+
+  setTimeout(
+    function() {
+
+      if (completed) {
+        return;
+      }
+
+
+      finish();
+
+
+      list.innerHTML =
+        '<div class="loading">' +
+        'Session request timed out.' +
+        '<br><br>' +
+        '<small>Check the browser console for details.</small>' +
+        '</div>';
+
+    },
+    10000
+  );
+
+
+  script.src =
+    url;
 
 
   document.body.appendChild(
