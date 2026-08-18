@@ -1772,7 +1772,9 @@ let dashboardLoading =
    LOAD SESSIONS
 ============================================================ */
 
-function loadSessions(onComplete) {
+function loadSessions(
+  onComplete
+) {
 
   const callbackName =
     "sessionsCallback_" +
@@ -1797,20 +1799,10 @@ function loadSessions(onComplete) {
 
       try {
 
-        console.log(
-          "Sessions response:",
-          result
-        );
-
-
         if (
           result &&
           result.success === true
         ) {
-
-          /*
-           * Store all sessions.
-           */
 
           sessions =
             Array.isArray(
@@ -1821,7 +1813,8 @@ function loadSessions(onComplete) {
 
 
           /*
-           * Store active session.
+           * Get the active session
+           * returned by Apps Script.
            */
 
           if (
@@ -1833,29 +1826,38 @@ function loadSessions(onComplete) {
 
 
             selectedSessionId =
-              activeSession.sessionId;
+              result.activeSession.sessionId;
 
 
             updateCurrentSession(
-              activeSession
+              result.activeSession
             );
 
           }
 
+          else {
 
-          /*
-           * IMPORTANT:
-           *
-           * Call the next function only
-           * after sessions have loaded.
-           */
+            /*
+             * No active session.
+             */
 
-          if (
-            typeof onComplete ===
-            "function"
-          ) {
+            activeSession =
+              null;
 
-            onComplete();
+
+            selectedSessionId =
+              "";
+
+
+            updateCurrentSession({
+
+              sessionId:
+                "",
+
+              sessionName:
+                "No Active Session"
+
+            });
 
           }
 
@@ -1864,16 +1866,8 @@ function loadSessions(onComplete) {
         else {
 
           console.error(
-            "Session loading failed:",
+            "Session loading error:",
             result
-          );
-
-
-          showError(
-            result &&
-            result.message
-              ? result.message
-              : "Unable to load attendance sessions."
           );
 
         }
@@ -1883,14 +1877,8 @@ function loadSessions(onComplete) {
       catch (error) {
 
         console.error(
-          "Session loading error:",
+          "Session processing error:",
           error
-        );
-
-
-        showError(
-          "Session loading error: " +
-          error.message
         );
 
       }
@@ -1901,6 +1889,21 @@ function loadSessions(onComplete) {
         script
       );
 
+
+      /*
+       * Tell the caller that
+       * session loading is finished.
+       */
+
+      if (
+        typeof onComplete ===
+        "function"
+      ) {
+
+        onComplete();
+
+      }
+
     };
 
 
@@ -1908,12 +1911,7 @@ function loadSessions(onComplete) {
     function() {
 
       console.error(
-        "Unable to connect to sessions endpoint."
-      );
-
-
-      showError(
-        "Unable to connect to the attendance system."
+        "Unable to load sessions."
       );
 
 
@@ -1921,6 +1919,16 @@ function loadSessions(onComplete) {
         callbackName,
         script
       );
+
+
+      if (
+        typeof onComplete ===
+        "function"
+      ) {
+
+        onComplete();
+
+      }
 
     };
 
@@ -3305,18 +3313,12 @@ window.addEventListener(
   function() {
 
     /*
-     * Load sessions FIRST.
-     * Dashboard will only load after
-     * the sessions have been received.
+     * Load sessions first.
+     * Once sessions are loaded, load dashboard.
      */
 
     loadSessions(
       function() {
-
-        /*
-         * After sessions are successfully loaded,
-         * load the dashboard for the active session.
-         */
 
         loadDashboard();
 
