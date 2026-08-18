@@ -103,6 +103,21 @@ body {
   font-size: 15px;
 }
 
+
+/* ============================================================
+   STATUS FILTER
+============================================================ */
+
+.filter {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 15px;
+  background: white;
+  min-width: 160px;
+  cursor: pointer;
+}
+
 button {
   padding: 12px 18px;
   border: none;
@@ -186,6 +201,10 @@ td {
 
   .controls {
     flex-direction: column;
+  }
+
+  .filter {
+    width: 100%;
   }
 
   .table-container {
@@ -302,6 +321,31 @@ ATTENDANCE RATE
 
 <div class="controls">
 
+
+<!-- STATUS FILTER -->
+
+<select
+  id="statusFilter"
+  class="filter"
+>
+
+<option value="ALL">
+ALL PARTICIPANTS
+</option>
+
+<option value="PRESENT">
+PRESENT
+</option>
+
+<option value="ABSENT">
+ABSENT
+</option>
+
+</select>
+
+
+<!-- SEARCH -->
+
 <input
   id="search"
   class="search"
@@ -309,11 +353,15 @@ ATTENDANCE RATE
   placeholder="Search name, barangay, position or participant ID..."
 >
 
+
+<!-- REFRESH -->
+
 <button
   onclick="loadDashboard()"
 >
 REFRESH
 </button>
+
 
 </div>
 
@@ -399,8 +447,7 @@ Loading...
 ============================================================ */
 
 /*
-   IMPORTANT:
-   Put your existing Apps Script /exec URL here.
+   YOUR EXISTING WORKING APPS SCRIPT URL
 */
 
 const API_URL =
@@ -522,38 +569,8 @@ function handleDashboardResult(
   }
 
 
-  /*
-   * Your current Apps Script response:
-   *
-   * {
-   *   success: true,
-   *   updated: "...",
-   *   summary: {
-   *     totalRegistered: 3,
-   *     totalAttended: 3,
-   *     totalAbsent: 0,
-   *     attendanceRate: 100
-   *   },
-   *   participants: [...]
-   * }
-   */
-
-
   const summary =
     result.summary || {};
-
-
-  /*
-   * Support both:
-   *
-   * result.summary.totalRegistered
-   *
-   * and
-   *
-   * result.totalRegistered
-   *
-   * so the dashboard remains compatible.
-   */
 
 
   const totalRegistered =
@@ -632,9 +649,7 @@ function handleDashboardResult(
       : [];
 
 
-  /*
-   * UPDATE STATISTICS
-   */
+  /* UPDATE STATISTICS */
 
   document.getElementById(
     "totalRegistered"
@@ -663,9 +678,7 @@ function handleDashboardResult(
     "%";
 
 
-  /*
-   * LAST UPDATED
-   */
+  /* LAST UPDATED */
 
   document.getElementById(
     "lastUpdated"
@@ -680,12 +693,144 @@ function handleDashboardResult(
     );
 
 
-  /*
-   * PARTICIPANT TABLE
-   */
+  /* DISPLAY TABLE */
+
+  applyFilters();
+
+}
+
+
+/* ============================================================
+   APPLY SEARCH + STATUS FILTER
+============================================================ */
+
+function applyFilters() {
+
+  const searchInput =
+    document.getElementById(
+      "search"
+    );
+
+
+  const statusFilter =
+    document.getElementById(
+      "statusFilter"
+    );
+
+
+  const query =
+    searchInput.value
+      .toLowerCase()
+      .trim();
+
+
+  const selectedStatus =
+    statusFilter.value;
+
+
+  const filtered =
+    participants.filter(
+      function(participant) {
+
+
+        /* STATUS FILTER */
+
+        const participantStatus =
+          String(
+            participant.status ||
+            "ABSENT"
+          )
+            .toUpperCase();
+
+
+        if (
+
+          selectedStatus !==
+          "ALL"
+
+          &&
+
+          participantStatus !==
+          selectedStatus
+
+        ) {
+
+          return false;
+
+        }
+
+
+        /* SEARCH FILTER */
+
+        if (
+          !query
+        ) {
+
+          return true;
+
+        }
+
+
+        return (
+
+          String(
+            participant.participantId ||
+            ""
+          )
+            .toLowerCase()
+            .includes(
+              query
+            )
+
+          ||
+
+          String(
+            participant.fullName ||
+            ""
+          )
+            .toLowerCase()
+            .includes(
+              query
+            )
+
+          ||
+
+          String(
+            participant.barangay ||
+            ""
+          )
+            .toLowerCase()
+            .includes(
+              query
+            )
+
+          ||
+
+          String(
+            participant.position ||
+            ""
+          )
+            .toLowerCase()
+            .includes(
+              query
+            )
+
+          ||
+
+          participantStatus
+            .toLowerCase()
+            .includes(
+              query
+            )
+
+        );
+
+      }
+    );
+
 
   renderTable(
-    participants
+    filtered
   );
 
 }
@@ -825,7 +970,7 @@ function renderTable(
 
 
 /* ============================================================
-   SEARCH
+   SEARCH EVENT
 ============================================================ */
 
 document
@@ -836,93 +981,25 @@ document
     "input",
     function() {
 
-      const query =
-        this.value
-          .toLowerCase()
-          .trim();
+      applyFilters();
+
+    }
+  );
 
 
-      if (
-        !query
-      ) {
+/* ============================================================
+   STATUS FILTER EVENT
+============================================================ */
 
-        renderTable(
-          participants
-        );
+document
+  .getElementById(
+    "statusFilter"
+  )
+  .addEventListener(
+    "change",
+    function() {
 
-        return;
-
-      }
-
-
-      const filtered =
-        participants.filter(
-          function(participant) {
-
-            return (
-
-              String(
-                participant.participantId ||
-                ""
-              )
-                .toLowerCase()
-                .includes(
-                  query
-                )
-
-              ||
-
-              String(
-                participant.fullName ||
-                ""
-              )
-                .toLowerCase()
-                .includes(
-                  query
-                )
-
-              ||
-
-              String(
-                participant.barangay ||
-                ""
-              )
-                .toLowerCase()
-                .includes(
-                  query
-                )
-
-              ||
-
-              String(
-                participant.position ||
-                ""
-              )
-                .toLowerCase()
-                .includes(
-                  query
-                )
-
-              ||
-
-              String(
-                participant.status ||
-                ""
-              )
-                .toLowerCase()
-                .includes(
-                  query
-                )
-
-            );
-
-          }
-        );
-
-
-      renderTable(
-        filtered
-      );
+      applyFilters();
 
     }
   );
