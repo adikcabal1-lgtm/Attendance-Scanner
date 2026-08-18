@@ -103,11 +103,6 @@ body {
   font-size: 15px;
 }
 
-
-/* ============================================================
-   STATUS FILTER
-============================================================ */
-
 .filter {
   padding: 12px;
   border: 1px solid #ccc;
@@ -125,6 +120,7 @@ button {
   background: #111;
   color: white;
   cursor: pointer;
+  font-size: 14px;
 }
 
 button:hover {
@@ -190,6 +186,15 @@ td {
 
 
 /* ============================================================
+   PRINT HEADER
+============================================================ */
+
+.print-header {
+  display: none;
+}
+
+
+/* ============================================================
    MOBILE
 ============================================================ */
 
@@ -217,6 +222,129 @@ td {
 
 }
 
+
+/* ============================================================
+   PRINT STYLES
+============================================================ */
+
+@media print {
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .header {
+    display: none;
+  }
+
+  .controls {
+    display: none;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  .stat-title {
+    color: black;
+    font-size: 10px;
+  }
+
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .table-container {
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  table {
+    width: 100%;
+    min-width: 0;
+    border-collapse: collapse;
+  }
+
+  th {
+    background: #eee !important;
+    color: black !important;
+    position: static;
+    border: 1px solid #999;
+    padding: 7px;
+  }
+
+  td {
+    border: 1px solid #ccc;
+    padding: 7px;
+    font-size: 11px;
+  }
+
+  .last-updated {
+    display: none;
+  }
+
+  .print-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .print-header h1 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  .print-header p {
+    margin: 5px 0;
+    font-size: 12px;
+  }
+
+  .print-filter {
+    font-weight: bold;
+  }
+
+  .present {
+    color: black;
+  }
+
+  .absent {
+    color: black;
+  }
+
+}
+
+
+/* ============================================================
+   PAGE BREAK
+============================================================ */
+
+@media print {
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+}
+
 </style>
 
 </head>
@@ -224,6 +352,10 @@ td {
 
 <body>
 
+
+<!-- ==========================================================
+     SCREEN HEADER
+=========================================================== -->
 
 <div class="header">
 
@@ -239,6 +371,40 @@ Live Participant Attendance Monitoring
 
 
 <div class="container">
+
+
+<!-- ==========================================================
+     PRINT HEADER
+=========================================================== -->
+
+<div class="print-header">
+
+<h1>
+ATTENDANCE MONITORING REPORT
+</h1>
+
+<p>
+Participant Attendance Record
+</p>
+
+<p>
+Date Generated:
+<span id="printDate">
+-
+</span>
+</p>
+
+<p>
+Filter:
+<span
+  id="printFilter"
+  class="print-filter"
+>
+ALL PARTICIPANTS
+</span>
+</p>
+
+</div>
 
 
 <!-- ==========================================================
@@ -322,8 +488,6 @@ ATTENDANCE RATE
 <div class="controls">
 
 
-<!-- STATUS FILTER -->
-
 <select
   id="statusFilter"
   class="filter"
@@ -344,8 +508,6 @@ ABSENT
 </select>
 
 
-<!-- SEARCH -->
-
 <input
   id="search"
   class="search"
@@ -354,12 +516,17 @@ ABSENT
 >
 
 
-<!-- REFRESH -->
-
 <button
   onclick="loadDashboard()"
 >
 REFRESH
+</button>
+
+
+<button
+  onclick="printReport()"
+>
+PRINT REPORT
 </button>
 
 
@@ -445,10 +612,6 @@ Loading...
 /* ============================================================
    APPS SCRIPT URL
 ============================================================ */
-
-/*
-   YOUR EXISTING WORKING APPS SCRIPT URL
-*/
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
@@ -649,8 +812,6 @@ function handleDashboardResult(
       : [];
 
 
-  /* UPDATE STATISTICS */
-
   document.getElementById(
     "totalRegistered"
   ).textContent =
@@ -678,8 +839,6 @@ function handleDashboardResult(
     "%";
 
 
-  /* LAST UPDATED */
-
   document.getElementById(
     "lastUpdated"
   ).textContent =
@@ -692,8 +851,6 @@ function handleDashboardResult(
         : "—"
     );
 
-
-  /* DISPLAY TABLE */
 
   applyFilters();
 
@@ -733,8 +890,6 @@ function applyFilters() {
       function(participant) {
 
 
-        /* STATUS FILTER */
-
         const participantStatus =
           String(
             participant.status ||
@@ -759,8 +914,6 @@ function applyFilters() {
 
         }
 
-
-        /* SEARCH FILTER */
 
         if (
           !query
@@ -1003,6 +1156,98 @@ document
 
     }
   );
+
+
+/* ============================================================
+   PRINT REPORT
+============================================================ */
+
+function printReport() {
+
+  const selectedStatus =
+    document.getElementById(
+      "statusFilter"
+    ).value;
+
+
+  const searchValue =
+    document.getElementById(
+      "search"
+    ).value.trim();
+
+
+  let filterText =
+    "ALL PARTICIPANTS";
+
+
+  if (
+    selectedStatus ===
+    "PRESENT"
+  ) {
+
+    filterText =
+      "PRESENT";
+
+  }
+
+
+  if (
+    selectedStatus ===
+    "ABSENT"
+  ) {
+
+    filterText =
+      "ABSENT";
+
+  }
+
+
+  if (
+    searchValue
+  ) {
+
+    filterText +=
+      " | SEARCH: " +
+      searchValue;
+
+  }
+
+
+  document.getElementById(
+    "printFilter"
+  ).textContent =
+    filterText;
+
+
+  document.getElementById(
+    "printDate"
+  ).textContent =
+    new Date().toLocaleString(
+      undefined,
+      {
+
+        year:
+          "numeric",
+
+        month:
+          "long",
+
+        day:
+          "numeric",
+
+        hour:
+          "numeric",
+
+        minute:
+          "2-digit"
+
+      }
+    );
+
+
+  window.print();
+
+}
 
 
 /* ============================================================
