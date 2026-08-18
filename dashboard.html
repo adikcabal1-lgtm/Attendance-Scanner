@@ -2474,9 +2474,7 @@ function loadDashboard() {
    HANDLE DASHBOARD RESULT
 ============================================================ */
 
-function handleDashboardResult(
-  result
-) {
+function handleDashboardResult(result) {
 
   console.log(
     "Dashboard response:",
@@ -2490,14 +2488,10 @@ function handleDashboardResult(
   ) {
 
     showError(
-
       result &&
       result.message
-
         ? result.message
-
         : "Unable to load dashboard."
-
     );
 
     return;
@@ -2505,139 +2499,104 @@ function handleDashboardResult(
   }
 
 
-  /*
-   * Update session if Apps Script returns one.
-   */
+  /* ==========================================================
+     CURRENT SESSION
+  ========================================================== */
 
   if (
-    result.session
-  ) {
-
-    updateCurrentSession(
-      result.session
-    );
-
-  }
-
-
-  if (
-    result.activeSession
+    result.activeSession &&
+    result.activeSession.sessionId
   ) {
 
     activeSession =
       result.activeSession;
 
+
+    selectedSessionId =
+      result.activeSession.sessionId;
+
+
+    document.getElementById(
+      "currentSessionName"
+    ).textContent =
+      result.activeSession.sessionName ||
+      "No Active Session";
+
+
+    document.getElementById(
+      "currentSessionId"
+    ).textContent =
+      result.activeSession.sessionId ||
+      "—";
+
+
+    document.getElementById(
+      "printSession"
+    ).textContent =
+      result.activeSession.sessionName ||
+      "—";
+
+  }
+
+  else {
+
+    document.getElementById(
+      "currentSessionName"
+    ).textContent =
+      "No Active Session";
+
+
+    document.getElementById(
+      "currentSessionId"
+    ).textContent =
+      "—";
+
+
+    document.getElementById(
+      "printSession"
+    ).textContent =
+      "—";
+
   }
 
 
-  /*
-   * Summary
-   */
+  /* ==========================================================
+     SUMMARY
+  ========================================================== */
 
   const summary =
-    result.summary ||
-    {};
+    result.summary || {};
 
 
   const totalRegistered =
-
-    summary.totalRegistered !== undefined
-
-      ? Number(
-          summary.totalRegistered
-        )
-
-      :
-
-        result.totalRegistered !== undefined
-
-          ? Number(
-              result.totalRegistered
-            )
-
-          : 0;
+    Number(
+      summary.totalRegistered || 0
+    );
 
 
   const totalAttended =
-
-    summary.totalAttended !== undefined
-
-      ? Number(
-          summary.totalAttended
-        )
-
-      :
-
-        result.totalAttended !== undefined
-
-          ? Number(
-              result.totalAttended
-            )
-
-          : 0;
+    Number(
+      summary.totalAttended || 0
+    );
 
 
   const totalAbsent =
-
-    summary.totalAbsent !== undefined
-
-      ? Number(
-          summary.totalAbsent
-        )
-
-      :
-
-        result.totalAbsent !== undefined
-
-          ? Number(
-              result.totalAbsent
-            )
-
-          :
-
-            Math.max(
-              totalRegistered -
-              totalAttended,
-              0
-            );
+    Number(
+      summary.totalAbsent !== undefined
+        ? summary.totalAbsent
+        : Math.max(
+            totalRegistered -
+            totalAttended,
+            0
+          )
+    );
 
 
   let attendanceRate =
+    Number(
+      summary.attendanceRate || 0
+    );
 
-    summary.attendanceRate !== undefined
-
-      ? Number(
-          summary.attendanceRate
-        )
-
-      :
-
-        result.attendanceRate !== undefined
-
-          ? Number(
-              result.attendanceRate
-            )
-
-          :
-
-            totalRegistered > 0
-
-              ? (
-                  totalAttended /
-                  totalRegistered
-                ) *
-                100
-
-              : 0;
-
-
-  /*
-   * Some Apps Script versions may return
-   * attendanceRate as decimal.
-   *
-   * Example:
-   * 0.75 = 75%
-   */
 
   if (
     attendanceRate > 0 &&
@@ -2650,24 +2609,21 @@ function handleDashboardResult(
   }
 
 
-  /*
-   * Participants
-   */
+  /* ==========================================================
+     PARTICIPANTS
+  ========================================================== */
 
   participants =
-
     Array.isArray(
       result.participants
     )
-
       ? result.participants
-
       : [];
 
 
-  /*
-   * Update statistics
-   */
+  /* ==========================================================
+     UPDATE STATISTICS
+  ========================================================== */
 
   document.getElementById(
     "totalRegistered"
@@ -2690,40 +2646,30 @@ function handleDashboardResult(
   document.getElementById(
     "attendancePercentage"
   ).textContent =
-
-    attendanceRate.toFixed(
-      2
-    ) +
-
+    attendanceRate.toFixed(2) +
     "%";
 
 
-  /*
-   * Last updated
-   */
+  /* ==========================================================
+     LAST UPDATED
+  ========================================================== */
 
   document.getElementById(
     "lastUpdated"
   ).textContent =
-
     "Last updated: " +
-
     (
-
       result.updated
-
         ? formatDate(
             result.updated
           )
-
         : new Date().toLocaleString()
-
     );
 
 
-  /*
-   * Apply filters
-   */
+  /* ==========================================================
+     RENDER
+  ========================================================== */
 
   applyFilters();
 
@@ -3312,18 +3258,9 @@ window.addEventListener(
   "load",
   function() {
 
-    /*
-     * Load sessions first.
-     * Once sessions are loaded, load dashboard.
-     */
+    loadDashboard();
 
-    loadSessions(
-      function() {
-
-        loadDashboard();
-
-      }
-    );
+    loadSessions();
 
   }
 );
