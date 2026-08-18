@@ -1772,7 +1772,7 @@ let dashboardLoading =
    LOAD SESSIONS
 ============================================================ */
 
-function loadSessions() {
+function loadSessions(onComplete) {
 
   const callbackName =
     "sessionsCallback_" +
@@ -1797,10 +1797,20 @@ function loadSessions() {
 
       try {
 
+        console.log(
+          "Sessions response:",
+          result
+        );
+
+
         if (
           result &&
-          result.success
+          result.success === true
         ) {
+
+          /*
+           * Store all sessions.
+           */
 
           sessions =
             Array.isArray(
@@ -1810,6 +1820,10 @@ function loadSessions() {
               : [];
 
 
+          /*
+           * Store active session.
+           */
+
           if (
             result.activeSession
           ) {
@@ -1818,19 +1832,8 @@ function loadSessions() {
               result.activeSession;
 
 
-            /*
-             * If no session has been selected yet,
-             * use the currently active session.
-             */
-
-            if (
-              !selectedSessionId
-            ) {
-
-              selectedSessionId =
-                activeSession.sessionId;
-
-            }
+            selectedSessionId =
+              activeSession.sessionId;
 
 
             updateCurrentSession(
@@ -1839,13 +1842,38 @@ function loadSessions() {
 
           }
 
+
+          /*
+           * IMPORTANT:
+           *
+           * Call the next function only
+           * after sessions have loaded.
+           */
+
+          if (
+            typeof onComplete ===
+            "function"
+          ) {
+
+            onComplete();
+
+          }
+
         }
 
         else {
 
           console.error(
-            "Session error:",
+            "Session loading failed:",
             result
+          );
+
+
+          showError(
+            result &&
+            result.message
+              ? result.message
+              : "Unable to load attendance sessions."
           );
 
         }
@@ -1857,6 +1885,12 @@ function loadSessions() {
         console.error(
           "Session loading error:",
           error
+        );
+
+
+        showError(
+          "Session loading error: " +
+          error.message
         );
 
       }
@@ -1874,7 +1908,12 @@ function loadSessions() {
     function() {
 
       console.error(
-        "Unable to load sessions."
+        "Unable to connect to sessions endpoint."
+      );
+
+
+      showError(
+        "Unable to connect to the attendance system."
       );
 
 
@@ -1951,27 +1990,62 @@ function openSessionSelector() {
     );
 
 
+  /*
+   * Show modal immediately.
+   */
+
+  modal.style.display =
+    "flex";
+
+
+  document.body.style.overflow =
+    "hidden";
+
+
+  /*
+   * Show loading message.
+   */
+
+  list.innerHTML =
+
+    '<div class="loading">' +
+
+    'Loading attendance sessions...' +
+
+    '</div>';
+
+
+  /*
+   * Get the latest sessions
+   * directly from Apps Script.
+   */
+
+  loadSessions(
+    function() {
+
+      renderSessionList();
+
+    }
+  );
+
+}
+
+  function renderSessionList() {
+
+  const list =
+    document.getElementById(
+      "sessionList"
+    );
+
+
   list.innerHTML =
     "";
 
 
-  /*
-   * Use current selected session
-   */
-
   if (
-    activeSession &&
-    !selectedSessionId
-  ) {
-
-    selectedSessionId =
-      activeSession.sessionId;
-
-  }
-
-
-  if (
-    !sessions ||
+    !Array.isArray(
+      sessions
+    ) ||
     sessions.length === 0
   ) {
 
@@ -1982,10 +2056,6 @@ function openSessionSelector() {
       'No attendance sessions available.' +
 
       '</div>';
-
-
-    modal.style.display =
-      "flex";
 
     return;
 
@@ -2010,16 +2080,19 @@ function openSessionSelector() {
 
 
       /*
-       * Highlight currently selected session
+       * Highlight selected session.
        */
 
       if (
+
         String(
           session.sessionId
         ) ===
+
         String(
           selectedSessionId
         )
+
       ) {
 
         button.classList.add(
@@ -2037,8 +2110,8 @@ function openSessionSelector() {
 
 
       const statusClass =
-        status ===
-        "ACTIVE"
+
+        status === "ACTIVE"
 
           ? "active-status"
 
@@ -2066,7 +2139,9 @@ function openSessionSelector() {
         '</div>' +
 
         '<span class="option-status ' +
+
         statusClass +
+
         '">' +
 
         escapeHtml(
@@ -2113,20 +2188,7 @@ function openSessionSelector() {
     }
   );
 
-
-  modal.style.display =
-    "flex";
-
-
-  /*
-   * Prevent page from scrolling behind modal
-   */
-
-  document.body.style.overflow =
-    "hidden";
-
 }
-
 
 /* ============================================================
    CLOSE SESSION SELECTOR
@@ -3243,17 +3305,23 @@ window.addEventListener(
   function() {
 
     /*
-     * First get the available sessions.
+     * Load sessions FIRST.
+     * Dashboard will only load after
+     * the sessions have been received.
      */
 
-    loadSessions();
+    loadSessions(
+      function() {
 
+        /*
+         * After sessions are successfully loaded,
+         * load the dashboard for the active session.
+         */
 
-    /*
-     * Then load dashboard.
-     */
+        loadDashboard();
 
-    loadDashboard();
+      }
+    );
 
   }
 );
