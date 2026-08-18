@@ -166,6 +166,13 @@ body {
 
 }
 
+.status.security {
+
+  background:
+    #f7e4ff;
+
+}
+
 .status h2 {
 
   margin:
@@ -196,31 +203,6 @@ body {
 
 }
 
-button {
-
-  border:
-    none;
-
-  border-radius:
-    8px;
-
-  padding:
-    12px 20px;
-
-  margin-top:
-    15px;
-
-  background:
-    #111;
-
-  color:
-    white;
-
-  font-size:
-    15px;
-
-}
-
 </style>
 
 </head>
@@ -236,7 +218,7 @@ ATTENDANCE CHECKER
 </h1>
 
 <p>
-Scan Participant QR Code
+Secure QR Attendance Scanner
 </p>
 
 </div>
@@ -258,11 +240,11 @@ Scan Participant QR Code
 >
 
 <h2>
-READY
+STARTING...
 </h2>
 
 <p>
-Allow camera access and scan a QR code.
+Please allow camera access.
 </p>
 
 </div>
@@ -276,19 +258,9 @@ Allow camera access and scan a QR code.
 
 /*
 ==============================================================
-IMPORTANT
-==============================================================
-
-PASTE YOUR APPS SCRIPT /exec URL BETWEEN THE QUOTES BELOW.
-
-Example:
-
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
-
+APPS SCRIPT API
 ==============================================================
 */
-
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
@@ -312,10 +284,11 @@ function startScanner() {
     showStatus(
       "error",
       "SECURITY ERROR",
-      "The scanner must be opened through HTTPS."
+      "Scanner must be opened through HTTPS."
     );
 
     return;
+
   }
 
 
@@ -331,6 +304,7 @@ function startScanner() {
     );
 
     return;
+
   }
 
 
@@ -374,7 +348,7 @@ function startScanner() {
     function(errorMessage) {
 
       /*
-       * Normal QR scanning failures
+       * Normal scanning failures
        * are ignored.
        */
 
@@ -408,11 +382,11 @@ function startScanner() {
 
 
 /* ============================================================
-   HANDLE QR
+   HANDLE QR CODE
 ============================================================ */
 
 function handleQRCode(
-  participantId
+  qrData
 ) {
 
   if (
@@ -420,20 +394,57 @@ function handleQRCode(
   ) {
 
     return;
+
   }
 
 
-  participantId =
+  qrData =
     String(
-      participantId
+      qrData
     ).trim();
 
 
   if (
-    !participantId
+    !qrData
   ) {
 
     return;
+
+  }
+
+
+  /*
+   * Make sure the QR has the expected
+   * secure format.
+   *
+   * Expected:
+   *
+   * PART-00001|signature
+   */
+
+  if (
+    qrData.indexOf("|") === -1
+  ) {
+
+    processing =
+      true;
+
+
+    showStatus(
+      "security",
+      "✕ INVALID QR",
+      "This QR code is not a secure participant QR code."
+    );
+
+
+    setTimeout(
+      resetScanner,
+      2500
+    );
+
+
+    return;
+
   }
 
 
@@ -444,37 +455,28 @@ function handleQRCode(
   showStatus(
     "info",
     "CHECKING...",
-    "Verifying participant..."
+    "Verifying secure participant QR..."
   );
 
-
-  /*
-   * Create a unique callback name.
-   */
 
   const callbackName =
     "attendanceCallback_" +
     Date.now();
 
 
-  /*
-   * Create the Apps Script URL.
-   */
-
   const url =
     API_URL +
     "?action=scan" +
-    "&id=" +
+    "&data=" +
     encodeURIComponent(
-      participantId
+      qrData
     ) +
     "&callback=" +
     callbackName;
 
 
-  /*
-   * Create JSONP callback.
-   */
+  let script = null;
+
 
   window[callbackName] =
     function(result) {
@@ -492,11 +494,7 @@ function handleQRCode(
     };
 
 
-  /*
-   * Create script element.
-   */
-
-  const script =
+  script =
     document.createElement(
       "script"
     );
@@ -578,6 +576,7 @@ function handleResult(
     );
 
     return;
+
   }
 
 
@@ -621,6 +620,23 @@ function handleResult(
 
   else if (
     result.result ===
+    "SECURITY ERROR"
+  ) {
+
+    showStatus(
+
+      "security",
+
+      "🔒 QR REJECTED",
+
+      result.message
+
+    );
+
+  }
+
+  else if (
+    result.result ===
     "INVALID"
   ) {
 
@@ -628,7 +644,7 @@ function handleResult(
 
       "error",
 
-      "✕ INVALID QR CODE",
+      "✕ INVALID QR",
 
       result.message
 
@@ -646,13 +662,9 @@ function handleResult(
   }
 
 
-  /*
-   * Prepare for another scan.
-   */
-
   setTimeout(
     resetScanner,
-    2500
+    3000
   );
 
 }
