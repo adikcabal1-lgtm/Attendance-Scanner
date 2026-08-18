@@ -12,40 +12,213 @@
 
 <title>Attendance Dashboard</title>
 
+
 <style>
 
 * {
   box-sizing: border-box;
 }
 
+
 body {
+
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  color: #222;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  background:
+    #f4f6f8;
+
+  color:
+    #222;
+
 }
+
+
+/* ============================================================
+   HEADER
+============================================================ */
 
 .header {
-  background: #111;
-  color: white;
-  text-align: center;
-  padding: 25px 15px;
+
+  background:
+    #111;
+
+  color:
+    white;
+
+  text-align:
+    center;
+
+  padding:
+    25px 15px;
+
 }
+
 
 .header h1 {
-  margin: 0;
-  font-size: 25px;
+
+  margin:
+    0;
+
+  font-size:
+    25px;
+
 }
+
 
 .header p {
-  margin: 8px 0 0;
-  font-size: 14px;
+
+  margin:
+    8px 0 0;
+
+  font-size:
+    14px;
+
 }
 
+
+/* ============================================================
+   CONTAINER
+============================================================ */
+
 .container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
+
+  max-width:
+    1100px;
+
+  margin:
+    auto;
+
+  padding:
+    20px;
+
+}
+
+
+/* ============================================================
+   CURRENT SESSION
+============================================================ */
+
+.session-box {
+
+  background:
+    white;
+
+  border-radius:
+    14px;
+
+  padding:
+    18px;
+
+  margin-bottom:
+    20px;
+
+  box-shadow:
+    0 3px 12px
+    rgba(0,0,0,0.08);
+
+}
+
+
+.session-top {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    15px;
+
+}
+
+
+.session-label {
+
+  font-size:
+    11px;
+
+  color:
+    #777;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    1px;
+
+}
+
+
+.session-name {
+
+  font-size:
+    21px;
+
+  font-weight:
+    bold;
+
+  margin-top:
+    5px;
+
+}
+
+
+.session-id {
+
+  font-size:
+    12px;
+
+  color:
+    #777;
+
+  margin-top:
+    4px;
+
+}
+
+
+.change-session-button {
+
+  background:
+    #111;
+
+  color:
+    white;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  padding:
+    11px 15px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.change-session-button:active {
+
+  transform:
+    scale(0.97);
+
 }
 
 
@@ -54,31 +227,65 @@ body {
 ============================================================ */
 
 .stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-bottom: 20px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap:
+    15px;
+
+  margin-bottom:
+    20px;
+
 }
 
+
 .stat {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
+
+  background:
+    white;
+
+  border-radius:
+    12px;
+
+  padding:
+    20px;
+
+  text-align:
+    center;
+
   box-shadow:
     0 3px 12px
     rgba(0,0,0,0.08);
+
 }
+
 
 .stat-title {
-  font-size: 13px;
-  color: #666;
+
+  font-size:
+    13px;
+
+  color:
+    #666;
+
 }
 
+
 .stat-number {
-  font-size: 30px;
-  font-weight: bold;
-  margin-top: 8px;
+
+  font-size:
+    30px;
+
+  font-weight:
+    bold;
+
+  margin-top:
+    8px;
+
 }
 
 
@@ -87,44 +294,105 @@ body {
 ============================================================ */
 
 .controls {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  display: flex;
-  gap: 10px;
+
+  background:
+    white;
+
+  padding:
+    15px;
+
+  border-radius:
+    12px;
+
+  margin-bottom:
+    15px;
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
 }
+
 
 .search {
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 7px;
-  font-size: 15px;
+
+  flex:
+    1;
+
+  padding:
+    12px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius:
+    7px;
+
+  font-size:
+    15px;
+
 }
+
 
 .filter {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 7px;
-  font-size: 15px;
-  background: white;
-  min-width: 160px;
-  cursor: pointer;
+
+  padding:
+    12px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius:
+    7px;
+
+  font-size:
+    15px;
+
+  background:
+    white;
+
+  min-width:
+    160px;
+
+  cursor:
+    pointer;
+
 }
+
 
 button {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 7px;
-  background: #111;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
+
+  padding:
+    12px 18px;
+
+  border:
+    none;
+
+  border-radius:
+    7px;
+
+  background:
+    #111;
+
+  color:
+    white;
+
+  cursor:
+    pointer;
+
+  font-size:
+    14px;
+
 }
 
+
 button:hover {
-  opacity: 0.85;
+
+  opacity:
+    0.85;
+
 }
 
 
@@ -133,55 +401,560 @@ button:hover {
 ============================================================ */
 
 .table-container {
-  background: white;
-  border-radius: 12px;
-  overflow: auto;
+
+  background:
+    white;
+
+  border-radius:
+    12px;
+
+  overflow:
+    auto;
+
   box-shadow:
     0 3px 12px
     rgba(0,0,0,0.08);
+
 }
+
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+
+  width:
+    100%;
+
+  border-collapse:
+    collapse;
+
 }
+
 
 th {
-  background: #111;
-  color: white;
-  padding: 13px;
-  text-align: left;
-  font-size: 13px;
-  position: sticky;
-  top: 0;
+
+  background:
+    #111;
+
+  color:
+    white;
+
+  padding:
+    13px;
+
+  text-align:
+    left;
+
+  font-size:
+    13px;
+
+  position:
+    sticky;
+
+  top:
+    0;
+
+  z-index:
+    2;
+
 }
+
 
 td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+
+  padding:
+    12px;
+
+  border-bottom:
+    1px solid #eee;
+
+  font-size:
+    14px;
+
 }
+
 
 .present {
-  color: #16852b;
-  font-weight: bold;
+
+  color:
+    #16852b;
+
+  font-weight:
+    bold;
+
 }
+
 
 .absent {
-  color: #c62828;
-  font-weight: bold;
+
+  color:
+    #c62828;
+
+  font-weight:
+    bold;
+
 }
+
 
 .status-message {
-  text-align: center;
-  padding: 30px;
+
+  text-align:
+    center;
+
+  padding:
+    30px;
+
 }
 
+
 .last-updated {
-  text-align: right;
-  color: #777;
-  font-size: 12px;
-  margin-top: 10px;
+
+  text-align:
+    right;
+
+  color:
+    #777;
+
+  font-size:
+    12px;
+
+  margin-top:
+    10px;
+
+}
+
+
+/* ============================================================
+   SESSION MODAL
+============================================================ */
+
+.modal {
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  background:
+    rgba(0,0,0,0.60);
+
+  display:
+    none;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    15px;
+
+  z-index:
+    9999;
+
+}
+
+
+/*
+IMPORTANT:
+
+The modal itself does not scroll.
+
+The CONTENT AREA scrolls.
+
+This prevents the entire page from becoming
+stuck when many sessions exist.
+*/
+
+
+.modal-content {
+
+  width:
+    100%;
+
+  max-width:
+    500px;
+
+  max-height:
+    90vh;
+
+  background:
+    white;
+
+  border-radius:
+    16px;
+
+  box-shadow:
+    0 10px 40px
+    rgba(0,0,0,0.30);
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  overflow:
+    hidden;
+
+}
+
+
+/* ============================================================
+   MODAL HEADER
+============================================================ */
+
+.modal-header {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  padding:
+    18px;
+
+  border-bottom:
+    1px solid #eee;
+
+  flex-shrink:
+    0;
+
+}
+
+
+.modal-title {
+
+  font-size:
+    19px;
+
+  font-weight:
+    bold;
+
+}
+
+
+.close-button {
+
+  width:
+    38px;
+
+  height:
+    38px;
+
+  padding:
+    0;
+
+  border:
+    none;
+
+  border-radius:
+    50%;
+
+  background:
+    #eee;
+
+  color:
+    #222;
+
+  font-size:
+    22px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+}
+
+
+.close-button:hover {
+
+  background:
+    #ddd;
+
+}
+
+
+/* ============================================================
+   SESSION LIST
+============================================================ */
+
+.session-list {
+
+  padding:
+    15px;
+
+  overflow-y:
+    auto;
+
+  max-height:
+    55vh;
+
+  flex:
+    1;
+
+}
+
+
+/*
+Scrollbar
+*/
+
+.session-list::-webkit-scrollbar {
+
+  width:
+    7px;
+
+}
+
+
+.session-list::-webkit-scrollbar-track {
+
+  background:
+    #f1f1f1;
+
+}
+
+
+.session-list::-webkit-scrollbar-thumb {
+
+  background:
+    #aaa;
+
+  border-radius:
+    10px;
+
+}
+
+
+.session-option {
+
+  display:
+    block;
+
+  width:
+    100%;
+
+  padding:
+    15px;
+
+  margin-bottom:
+    10px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius:
+    10px;
+
+  background:
+    white;
+
+  text-align:
+    left;
+
+  cursor:
+    pointer;
+
+}
+
+
+.session-option:last-child {
+
+  margin-bottom:
+    0;
+
+}
+
+
+.session-option:hover {
+
+  background:
+    #f7f7f7;
+
+}
+
+
+.session-option.active {
+
+  border:
+    2px solid #111;
+
+  background:
+    #f0f0f0;
+
+}
+
+
+.option-name {
+
+  font-weight:
+    bold;
+
+  font-size:
+    15px;
+
+}
+
+
+.option-id {
+
+  font-size:
+    12px;
+
+  color:
+    #777;
+
+  margin-top:
+    5px;
+
+}
+
+
+.option-status {
+
+  display:
+    inline-block;
+
+  margin-top:
+    8px;
+
+  padding:
+    4px 8px;
+
+  border-radius:
+    20px;
+
+  font-size:
+    10px;
+
+  font-weight:
+    bold;
+
+}
+
+
+.option-status.active-status {
+
+  background:
+    #dff5e1;
+
+  color:
+    #16852b;
+
+}
+
+
+.option-status.closed-status {
+
+  background:
+    #eee;
+
+  color:
+    #666;
+
+}
+
+
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
+
+.modal-footer {
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
+  padding:
+    15px;
+
+  border-top:
+    1px solid #eee;
+
+  flex-shrink:
+    0;
+
+}
+
+
+.modal-button {
+
+  flex:
+    1;
+
+  padding:
+    13px;
+
+  border:
+    none;
+
+  border-radius:
+    8px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+
+.cancel-button {
+
+  background:
+    #ddd;
+
+  color:
+    #222;
+
+}
+
+
+.activate-button {
+
+  background:
+    #111;
+
+  color:
+    white;
+
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+.loading {
+
+  text-align:
+    center;
+
+  padding:
+    30px;
+
+  color:
+    #777;
+
 }
 
 
@@ -190,7 +963,10 @@ td {
 ============================================================ */
 
 .print-header {
-  display: none;
+
+  display:
+    none;
+
 }
 
 
@@ -198,149 +974,379 @@ td {
    MOBILE
 ============================================================ */
 
-@media (max-width: 750px) {
+@media (
+  max-width: 750px
+) {
+
+  .container {
+
+    padding:
+      12px;
+
+  }
+
 
   .stats {
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap:
+      10px;
+
   }
+
+
+  .stat {
+
+    padding:
+      15px;
+
+  }
+
+
+  .stat-number {
+
+    font-size:
+      25px;
+
+  }
+
 
   .controls {
-    flex-direction: column;
+
+    flex-direction:
+      column;
+
   }
+
 
   .filter {
-    width: 100%;
+
+    width:
+      100%;
+
   }
+
 
   .table-container {
-    overflow-x: auto;
+
+    overflow-x:
+      auto;
+
   }
 
+
   table {
-    min-width: 850px;
+
+    min-width:
+      850px;
+
+  }
+
+
+  .session-top {
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+  }
+
+
+  .change-session-button {
+
+    width:
+      100%;
+
+  }
+
+
+  .modal {
+
+    align-items:
+      flex-end;
+
+  }
+
+
+  .modal-content {
+
+    max-height:
+      92vh;
+
+    border-radius:
+      16px 16px 0 0;
+
+  }
+
+
+  .session-list {
+
+    max-height:
+      55vh;
+
   }
 
 }
 
 
 /* ============================================================
-   PRINT STYLES
+   PRINT
 ============================================================ */
 
 @media print {
 
   body {
-    background: white;
-    color: black;
+
+    background:
+      white;
+
+    color:
+      black;
+
   }
+
 
   .header {
-    display: none;
+
+    display:
+      none;
+
   }
+
+
+  .session-box {
+
+    box-shadow:
+      none;
+
+    border:
+      1px solid #ccc;
+
+  }
+
+
+  .change-session-button {
+
+    display:
+      none;
+
+  }
+
 
   .controls {
-    display: none;
+
+    display:
+      none;
+
   }
+
 
   .stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
+
+    display:
+      grid;
+
+    grid-template-columns:
+      repeat(4, 1fr);
+
+    gap:
+      10px;
+
+    margin-bottom:
+      20px;
+
   }
+
 
   .stat {
-    box-shadow: none;
-    border: 1px solid #ccc;
-    padding: 10px;
+
+    box-shadow:
+      none;
+
+    border:
+      1px solid #ccc;
+
+    padding:
+      10px;
+
   }
+
 
   .stat-title {
-    color: black;
-    font-size: 10px;
+
+    color:
+      black;
+
+    font-size:
+      10px;
+
   }
+
 
   .stat-number {
-    font-size: 18px;
+
+    font-size:
+      18px;
+
   }
+
 
   .container {
-    max-width: none;
-    padding: 0;
+
+    max-width:
+      none;
+
+    padding:
+      0;
+
   }
+
 
   .table-container {
-    box-shadow: none;
-    overflow: visible;
+
+    box-shadow:
+      none;
+
+    overflow:
+      visible;
+
   }
+
 
   table {
-    width: 100%;
-    min-width: 0;
-    border-collapse: collapse;
+
+    width:
+      100%;
+
+    min-width:
+      0;
+
+    border-collapse:
+      collapse;
+
   }
+
 
   th {
-    background: #eee !important;
-    color: black !important;
-    position: static;
-    border: 1px solid #999;
-    padding: 7px;
+
+    background:
+      #eee !important;
+
+    color:
+      black !important;
+
+    position:
+      static;
+
+    border:
+      1px solid #999;
+
+    padding:
+      7px;
+
   }
+
 
   td {
-    border: 1px solid #ccc;
-    padding: 7px;
-    font-size: 11px;
+
+    border:
+      1px solid #ccc;
+
+    padding:
+      7px;
+
+    font-size:
+      11px;
+
   }
+
 
   .last-updated {
-    display: none;
+
+    display:
+      none;
+
   }
+
 
   .print-header {
-    display: block;
-    text-align: center;
-    margin-bottom: 20px;
+
+    display:
+      block;
+
+    text-align:
+      center;
+
+    margin-bottom:
+      20px;
+
   }
+
 
   .print-header h1 {
-    margin: 0;
-    font-size: 22px;
+
+    margin:
+      0;
+
+    font-size:
+      22px;
+
   }
+
 
   .print-header p {
-    margin: 5px 0;
-    font-size: 12px;
+
+    margin:
+      5px 0;
+
+    font-size:
+      12px;
+
   }
+
 
   .print-filter {
-    font-weight: bold;
+
+    font-weight:
+      bold;
+
   }
 
-  .present {
-    color: black;
-  }
 
+  .present,
   .absent {
-    color: black;
+
+    color:
+      black;
+
   }
 
-}
 
+  .modal {
 
-/* ============================================================
-   PAGE BREAK
-============================================================ */
+    display:
+      none !important;
 
-@media print {
+  }
+
 
   tr {
-    page-break-inside: avoid;
+
+    page-break-inside:
+      avoid;
+
   }
 
+
   thead {
-    display: table-header-group;
+
+    display:
+      table-header-group;
+
   }
 
 }
@@ -354,7 +1360,7 @@ td {
 
 
 <!-- ==========================================================
-     SCREEN HEADER
+     HEADER
 =========================================================== -->
 
 <div class="header">
@@ -388,6 +1394,13 @@ Participant Attendance Record
 </p>
 
 <p>
+Session:
+<span id="printSession">
+-
+</span>
+</p>
+
+<p>
 Date Generated:
 <span id="printDate">
 -
@@ -403,6 +1416,51 @@ Filter:
 ALL PARTICIPANTS
 </span>
 </p>
+
+</div>
+
+
+<!-- ==========================================================
+     CURRENT SESSION
+=========================================================== -->
+
+<div class="session-box">
+
+<div class="session-top">
+
+<div>
+
+<div class="session-label">
+CURRENT ATTENDANCE SESSION
+</div>
+
+
+<div
+  id="currentSessionName"
+  class="session-name"
+>
+Loading...
+</div>
+
+
+<div
+  id="currentSessionId"
+  class="session-id"
+>
+Please wait...
+</div>
+
+</div>
+
+
+<button
+  class="change-session-button"
+  onclick="openSessionSelector()"
+>
+CHANGE SESSION
+</button>
+
+</div>
 
 </div>
 
@@ -606,6 +1664,79 @@ Loading...
 </div>
 
 
+<!-- ==========================================================
+     SESSION MODAL
+=========================================================== -->
+
+<div
+  id="sessionModal"
+  class="modal"
+>
+
+<div class="modal-content">
+
+
+<!-- MODAL HEADER -->
+
+<div class="modal-header">
+
+<div class="modal-title">
+SELECT ATTENDANCE SESSION
+</div>
+
+
+<button
+  class="close-button"
+  onclick="closeSessionSelector()"
+  aria-label="Close"
+>
+&times;
+</button>
+
+</div>
+
+
+<!-- SESSION LIST -->
+
+<div
+  id="sessionList"
+  class="session-list"
+>
+
+<div class="loading">
+Loading sessions...
+</div>
+
+</div>
+
+
+<!-- MODAL FOOTER -->
+
+<div class="modal-footer">
+
+<button
+  class="modal-button cancel-button"
+  onclick="closeSessionSelector()"
+>
+CANCEL
+</button>
+
+
+<button
+  class="modal-button activate-button"
+  onclick="activateSelectedSession()"
+>
+VIEW SESSION
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
 <script>
 
 
@@ -614,10 +1745,512 @@ Loading...
 ============================================================ */
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
+  "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwXjUpXEVWLolUdirs/exec";
 
 
-let participants = [];
+/* ============================================================
+   GLOBAL VARIABLES
+============================================================ */
+
+let participants =
+  [];
+
+let sessions =
+  [];
+
+let activeSession =
+  null;
+
+let selectedSessionId =
+  "";
+
+let dashboardLoading =
+  false;
+
+
+/* ============================================================
+   LOAD SESSIONS
+============================================================ */
+
+function loadSessions() {
+
+  const callbackName =
+    "sessionsCallback_" +
+    Date.now();
+
+
+  const url =
+    API_URL +
+    "?action=sessions" +
+    "&callback=" +
+    callbackName;
+
+
+  let script =
+    document.createElement(
+      "script"
+    );
+
+
+  window[callbackName] =
+    function(result) {
+
+      try {
+
+        if (
+          result &&
+          result.success
+        ) {
+
+          sessions =
+            Array.isArray(
+              result.sessions
+            )
+              ? result.sessions
+              : [];
+
+
+          if (
+            result.activeSession
+          ) {
+
+            activeSession =
+              result.activeSession;
+
+
+            /*
+             * If no session has been selected yet,
+             * use the currently active session.
+             */
+
+            if (
+              !selectedSessionId
+            ) {
+
+              selectedSessionId =
+                activeSession.sessionId;
+
+            }
+
+
+            updateCurrentSession(
+              activeSession
+            );
+
+          }
+
+        }
+
+        else {
+
+          console.error(
+            "Session error:",
+            result
+          );
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Session loading error:",
+          error
+        );
+
+      }
+
+
+      cleanup(
+        callbackName,
+        script
+      );
+
+    };
+
+
+  script.onerror =
+    function() {
+
+      console.error(
+        "Unable to load sessions."
+      );
+
+
+      cleanup(
+        callbackName,
+        script
+      );
+
+    };
+
+
+  document.body.appendChild(
+    script
+  );
+
+}
+
+
+/* ============================================================
+   UPDATE CURRENT SESSION
+============================================================ */
+
+function updateCurrentSession(
+  session
+) {
+
+  if (
+    !session
+  ) {
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "currentSessionName"
+  ).textContent =
+    session.sessionName ||
+    "No Session";
+
+
+  document.getElementById(
+    "currentSessionId"
+  ).textContent =
+    session.sessionId ||
+    "—";
+
+
+  document.getElementById(
+    "printSession"
+  ).textContent =
+    session.sessionName ||
+    "—";
+
+}
+
+
+/* ============================================================
+   OPEN SESSION SELECTOR
+============================================================ */
+
+function openSessionSelector() {
+
+  const modal =
+    document.getElementById(
+      "sessionModal"
+    );
+
+
+  const list =
+    document.getElementById(
+      "sessionList"
+    );
+
+
+  list.innerHTML =
+    "";
+
+
+  /*
+   * Use current selected session
+   */
+
+  if (
+    activeSession &&
+    !selectedSessionId
+  ) {
+
+    selectedSessionId =
+      activeSession.sessionId;
+
+  }
+
+
+  if (
+    !sessions ||
+    sessions.length === 0
+  ) {
+
+    list.innerHTML =
+
+      '<div class="loading">' +
+
+      'No attendance sessions available.' +
+
+      '</div>';
+
+
+    modal.style.display =
+      "flex";
+
+    return;
+
+  }
+
+
+  sessions.forEach(
+    function(session) {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.type =
+        "button";
+
+
+      button.className =
+        "session-option";
+
+
+      /*
+       * Highlight currently selected session
+       */
+
+      if (
+        String(
+          session.sessionId
+        ) ===
+        String(
+          selectedSessionId
+        )
+      ) {
+
+        button.classList.add(
+          "active"
+        );
+
+      }
+
+
+      const status =
+        String(
+          session.status ||
+          ""
+        ).toUpperCase();
+
+
+      const statusClass =
+        status ===
+        "ACTIVE"
+
+          ? "active-status"
+
+          : "closed-status";
+
+
+      button.innerHTML =
+
+        '<div class="option-name">' +
+
+        escapeHtml(
+          session.sessionName ||
+          "Unnamed Session"
+        ) +
+
+        '</div>' +
+
+        '<div class="option-id">' +
+
+        escapeHtml(
+          session.sessionId ||
+          ""
+        ) +
+
+        '</div>' +
+
+        '<span class="option-status ' +
+        statusClass +
+        '">' +
+
+        escapeHtml(
+          status ||
+          "UNKNOWN"
+        ) +
+
+        '</span>';
+
+
+      button.onclick =
+        function() {
+
+          selectedSessionId =
+            session.sessionId;
+
+
+          document
+            .querySelectorAll(
+              ".session-option"
+            )
+            .forEach(
+              function(item) {
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+          button.classList.add(
+            "active"
+          );
+
+        };
+
+
+      list.appendChild(
+        button
+      );
+
+    }
+  );
+
+
+  modal.style.display =
+    "flex";
+
+
+  /*
+   * Prevent page from scrolling behind modal
+   */
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/* ============================================================
+   CLOSE SESSION SELECTOR
+============================================================ */
+
+function closeSessionSelector() {
+
+  document.getElementById(
+    "sessionModal"
+  ).style.display =
+    "none";
+
+
+  /*
+   * Restore page scrolling
+   */
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+/* ============================================================
+   CLICK OUTSIDE MODAL TO CLOSE
+============================================================ */
+
+document
+  .getElementById(
+    "sessionModal"
+  )
+  .addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target ===
+        this
+      ) {
+
+        closeSessionSelector();
+
+      }
+
+    }
+  );
+
+
+/* ============================================================
+   ESC KEY CLOSE MODAL
+============================================================ */
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      closeSessionSelector();
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   ACTIVATE / VIEW SELECTED SESSION
+============================================================ */
+
+function activateSelectedSession() {
+
+  if (
+    !selectedSessionId
+  ) {
+
+    alert(
+      "Please select an attendance session."
+    );
+
+    return;
+
+  }
+
+
+  const selected =
+    sessions.find(
+      function(session) {
+
+        return String(
+          session.sessionId
+        ) ===
+        String(
+          selectedSessionId
+        );
+
+      }
+    );
+
+
+  if (
+    selected
+  ) {
+
+    updateCurrentSession(
+      selected
+    );
+
+  }
+
+
+  closeSessionSelector();
+
+
+  /*
+   * Load dashboard using selected session.
+   */
+
+  loadDashboard();
+
+}
 
 
 /* ============================================================
@@ -626,19 +2259,75 @@ let participants = [];
 
 function loadDashboard() {
 
+  if (
+    dashboardLoading
+  ) {
+
+    return;
+
+  }
+
+
+  dashboardLoading =
+    true;
+
+
+  const tbody =
+    document.getElementById(
+      "participantTable"
+    );
+
+
+  tbody.innerHTML =
+
+    '<tr>' +
+
+    '<td colspan="6" class="status-message">' +
+
+    'Loading attendance records...' +
+
+    '</td>' +
+
+    '</tr>';
+
+
   const callbackName =
     "dashboardCallback_" +
     Date.now();
 
 
-  const url =
+  /*
+   * IMPORTANT:
+   *
+   * Send the selected session ID
+   * to Apps Script.
+   */
+
+  let url =
     API_URL +
-    "?action=dashboard" +
+    "?action=dashboard";
+
+
+  if (
+    selectedSessionId
+  ) {
+
+    url +=
+      "&sessionId=" +
+      encodeURIComponent(
+        selectedSessionId
+      );
+
+  }
+
+
+  url +=
     "&callback=" +
     callbackName;
 
 
-  let script = null;
+  let script =
+    null;
 
 
   window[callbackName] =
@@ -650,7 +2339,9 @@ function loadDashboard() {
           result
         );
 
-      } catch (error) {
+      }
+
+      catch (error) {
 
         showError(
           "Dashboard data error: " +
@@ -658,6 +2349,10 @@ function loadDashboard() {
         );
 
       }
+
+
+      dashboardLoading =
+        false;
 
 
       cleanup(
@@ -680,6 +2375,10 @@ function loadDashboard() {
 
   script.onerror =
     function() {
+
+      dashboardLoading =
+        false;
+
 
       showError(
         "Unable to connect to the attendance system."
@@ -721,10 +2420,14 @@ function handleDashboardResult(
   ) {
 
     showError(
+
       result &&
       result.message
+
         ? result.message
+
         : "Unable to load dashboard."
+
     );
 
     return;
@@ -732,77 +2435,157 @@ function handleDashboardResult(
   }
 
 
+  /*
+   * Update session if Apps Script returns one.
+   */
+
+  if (
+    result.session
+  ) {
+
+    updateCurrentSession(
+      result.session
+    );
+
+  }
+
+
+  if (
+    result.activeSession
+  ) {
+
+    activeSession =
+      result.activeSession;
+
+  }
+
+
+  /*
+   * Summary
+   */
+
   const summary =
-    result.summary || {};
+    result.summary ||
+    {};
 
 
   const totalRegistered =
+
     summary.totalRegistered !== undefined
 
-      ? summary.totalRegistered
+      ? Number(
+          summary.totalRegistered
+        )
 
-      : (
-          result.totalRegistered !== undefined
+      :
 
-            ? result.totalRegistered
+        result.totalRegistered !== undefined
 
-            : 0
-        );
+          ? Number(
+              result.totalRegistered
+            )
+
+          : 0;
 
 
   const totalAttended =
+
     summary.totalAttended !== undefined
 
-      ? summary.totalAttended
+      ? Number(
+          summary.totalAttended
+        )
 
-      : (
-          result.totalAttended !== undefined
+      :
 
-            ? result.totalAttended
+        result.totalAttended !== undefined
 
-            : 0
-        );
+          ? Number(
+              result.totalAttended
+            )
+
+          : 0;
 
 
   const totalAbsent =
+
     summary.totalAbsent !== undefined
 
-      ? summary.totalAbsent
+      ? Number(
+          summary.totalAbsent
+        )
 
-      : (
-          result.totalAbsent !== undefined
+      :
 
-            ? result.totalAbsent
+        result.totalAbsent !== undefined
 
-            : 0
-        );
+          ? Number(
+              result.totalAbsent
+            )
+
+          :
+
+            Math.max(
+              totalRegistered -
+              totalAttended,
+              0
+            );
 
 
-  const attendanceRate =
+  let attendanceRate =
+
     summary.attendanceRate !== undefined
 
-      ? summary.attendanceRate
+      ? Number(
+          summary.attendanceRate
+        )
 
-      : (
-          result.attendanceRate !== undefined
+      :
 
-            ? result.attendanceRate
+        result.attendanceRate !== undefined
 
-            : (
-                totalRegistered > 0
+          ? Number(
+              result.attendanceRate
+            )
 
-                  ? (
-                      totalAttended /
-                      totalRegistered
-                    ) *
-                    100
+          :
 
-                  : 0
-              )
-        );
+            totalRegistered > 0
 
+              ? (
+                  totalAttended /
+                  totalRegistered
+                ) *
+                100
+
+              : 0;
+
+
+  /*
+   * Some Apps Script versions may return
+   * attendanceRate as decimal.
+   *
+   * Example:
+   * 0.75 = 75%
+   */
+
+  if (
+    attendanceRate > 0 &&
+    attendanceRate <= 1
+  ) {
+
+    attendanceRate *=
+      100;
+
+  }
+
+
+  /*
+   * Participants
+   */
 
   participants =
+
     Array.isArray(
       result.participants
     )
@@ -811,6 +2594,10 @@ function handleDashboardResult(
 
       : [];
 
+
+  /*
+   * Update statistics
+   */
 
   document.getElementById(
     "totalRegistered"
@@ -833,24 +2620,40 @@ function handleDashboardResult(
   document.getElementById(
     "attendancePercentage"
   ).textContent =
-    Number(
-      attendanceRate
-    ).toFixed(2) +
+
+    attendanceRate.toFixed(
+      2
+    ) +
+
     "%";
 
+
+  /*
+   * Last updated
+   */
 
   document.getElementById(
     "lastUpdated"
   ).textContent =
+
     "Last updated: " +
+
     (
+
       result.updated
+
         ? formatDate(
             result.updated
           )
-        : "—"
+
+        : new Date().toLocaleString()
+
     );
 
+
+  /*
+   * Apply filters
+   */
 
   applyFilters();
 
@@ -858,7 +2661,7 @@ function handleDashboardResult(
 
 
 /* ============================================================
-   APPLY SEARCH + STATUS FILTER
+   APPLY FILTERS
 ============================================================ */
 
 function applyFilters() {
@@ -889,7 +2692,6 @@ function applyFilters() {
     participants.filter(
       function(participant) {
 
-
         const participantStatus =
           String(
             participant.status ||
@@ -897,6 +2699,10 @@ function applyFilters() {
           )
             .toUpperCase();
 
+
+        /*
+         * Status filter
+         */
 
         if (
 
@@ -914,6 +2720,10 @@ function applyFilters() {
 
         }
 
+
+        /*
+         * Search
+         */
 
         if (
           !query
@@ -1014,7 +2824,7 @@ function renderTable(
 
       '<td colspan="6" class="status-message">' +
 
-      'No participants found.' +
+      'No participants found for this session.' +
 
       '</td>' +
 
@@ -1025,7 +2835,8 @@ function renderTable(
   }
 
 
-  tbody.innerHTML = "";
+  tbody.innerHTML =
+    "";
 
 
   list.forEach(
@@ -1046,7 +2857,9 @@ function renderTable(
 
 
       const statusClass =
-        status === "PRESENT"
+
+        status ===
+        "PRESENT"
 
           ? "present"
 
@@ -1054,8 +2867,13 @@ function renderTable(
 
 
       const attendanceTime =
+
         participant.timestamp
-          ? participant.timestamp
+
+          ? formatDate(
+              participant.timestamp
+            )
+
           : "—";
 
 
@@ -1191,7 +3009,7 @@ function printReport() {
   }
 
 
-  if (
+  else if (
     selectedStatus ===
     "ABSENT"
   ) {
@@ -1222,6 +3040,7 @@ function printReport() {
   document.getElementById(
     "printDate"
   ).textContent =
+
     new Date().toLocaleString(
       undefined,
       {
@@ -1356,7 +3175,9 @@ function cleanup(
       callbackName
     ];
 
-  } catch (e) {}
+  }
+
+  catch (e) {}
 
 
   if (
@@ -1421,9 +3242,39 @@ window.addEventListener(
   "load",
   function() {
 
+    /*
+     * First get the available sessions.
+     */
+
+    loadSessions();
+
+
+    /*
+     * Then load dashboard.
+     */
+
     loadDashboard();
 
   }
+);
+
+
+/* ============================================================
+   AUTO REFRESH
+============================================================ */
+
+setInterval(
+  function() {
+
+    /*
+     * Refresh attendance records
+     * without changing the selected session.
+     */
+
+    loadDashboard();
+
+  },
+  30000
 );
 
 </script>
