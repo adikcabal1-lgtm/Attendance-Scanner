@@ -19,55 +19,33 @@
 }
 
 body {
-
   margin: 0;
-
-  font-family:
-    Arial,
-    sans-serif;
-
+  font-family: Arial, sans-serif;
   background: #f4f6f8;
-
   color: #222;
-
 }
 
 .header {
-
   background: #111;
-
   color: white;
-
   text-align: center;
-
   padding: 25px 15px;
-
 }
 
 .header h1 {
-
   margin: 0;
-
   font-size: 25px;
-
 }
 
 .header p {
-
   margin: 8px 0 0;
-
   font-size: 14px;
-
 }
 
 .container {
-
   max-width: 1100px;
-
   margin: auto;
-
   padding: 20px;
-
 }
 
 
@@ -76,50 +54,31 @@ body {
 ============================================================ */
 
 .stats {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-
   margin-bottom: 20px;
-
 }
 
 .stat {
-
   background: white;
-
   border-radius: 12px;
-
   padding: 20px;
-
   text-align: center;
-
   box-shadow:
     0 3px 12px
     rgba(0,0,0,0.08);
-
 }
 
 .stat-title {
-
   font-size: 13px;
-
   color: #666;
-
 }
 
 .stat-number {
-
   font-size: 30px;
-
   font-weight: bold;
-
   margin-top: 8px;
-
 }
 
 
@@ -128,56 +87,33 @@ body {
 ============================================================ */
 
 .controls {
-
   background: white;
-
   padding: 15px;
-
   border-radius: 12px;
-
   margin-bottom: 15px;
-
   display: flex;
-
   gap: 10px;
-
 }
 
 .search {
-
   flex: 1;
-
   padding: 12px;
-
-  border:
-    1px solid #ccc;
-
+  border: 1px solid #ccc;
   border-radius: 7px;
-
   font-size: 15px;
-
 }
 
 button {
-
   padding: 12px 18px;
-
   border: none;
-
   border-radius: 7px;
-
   background: #111;
-
   color: white;
-
   cursor: pointer;
-
 }
 
 button:hover {
-
   opacity: 0.85;
-
 }
 
 
@@ -186,90 +122,55 @@ button:hover {
 ============================================================ */
 
 .table-container {
-
   background: white;
-
   border-radius: 12px;
-
   overflow: auto;
-
   box-shadow:
     0 3px 12px
     rgba(0,0,0,0.08);
-
 }
 
 table {
-
   width: 100%;
-
   border-collapse: collapse;
-
 }
 
 th {
-
   background: #111;
-
   color: white;
-
   padding: 13px;
-
   text-align: left;
-
   font-size: 13px;
-
   position: sticky;
-
   top: 0;
-
 }
 
 td {
-
   padding: 12px;
-
-  border-bottom:
-    1px solid #eee;
-
+  border-bottom: 1px solid #eee;
   font-size: 14px;
-
 }
 
 .present {
-
   color: #16852b;
-
   font-weight: bold;
-
 }
 
 .absent {
-
   color: #c62828;
-
   font-weight: bold;
-
 }
 
 .status-message {
-
   text-align: center;
-
   padding: 30px;
-
 }
 
 .last-updated {
-
   text-align: right;
-
   color: #777;
-
   font-size: 12px;
-
   margin-top: 10px;
-
 }
 
 
@@ -280,28 +181,19 @@ td {
 @media (max-width: 750px) {
 
   .stats {
-
-    grid-template-columns:
-      repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .controls {
-
     flex-direction: column;
-
   }
 
   .table-container {
-
     overflow-x: auto;
-
   }
 
   table {
-
     min-width: 850px;
-
   }
 
 }
@@ -466,6 +358,7 @@ Attendance Time
 
 </thead>
 
+
 <tbody
   id="participantTable"
 >
@@ -505,6 +398,11 @@ Loading...
    APPS SCRIPT URL
 ============================================================ */
 
+/*
+   IMPORTANT:
+   Put your existing Apps Script /exec URL here.
+*/
+
 const API_URL =
   "https://script.google.com/macros/s/AKfycbxT2If3Bsjxg_kUJPtUOwhChHocZe-lXkXX1klwXGKlw2EeNigxwTUpXEVWLolUdirs/exec";
 
@@ -536,9 +434,21 @@ function loadDashboard() {
   window[callbackName] =
     function(result) {
 
-      handleDashboardResult(
-        result
-      );
+      try {
+
+        handleDashboardResult(
+          result
+        );
+
+      } catch (error) {
+
+        showError(
+          "Dashboard data error: " +
+          error.message
+        );
+
+      }
+
 
       cleanup(
         callbackName,
@@ -565,6 +475,7 @@ function loadDashboard() {
         "Unable to connect to the attendance system."
       );
 
+
       cleanup(
         callbackName,
         script
@@ -588,9 +499,15 @@ function handleDashboardResult(
   result
 ) {
 
+  console.log(
+    "Dashboard response:",
+    result
+  );
+
+
   if (
     !result ||
-    !result.success
+    result.success !== true
   ) {
 
     showError(
@@ -606,51 +523,149 @@ function handleDashboardResult(
 
 
   /*
-   * IMPORTANT:
+   * Your current Apps Script response:
    *
-   * Apps Script returns:
-   *
-   * result.summary.totalRegistered
-   * result.summary.totalAttended
-   * result.summary.totalAbsent
-   * result.summary.attendanceRate
-   *
+   * {
+   *   success: true,
+   *   updated: "...",
+   *   summary: {
+   *     totalRegistered: 3,
+   *     totalAttended: 3,
+   *     totalAbsent: 0,
+   *     attendanceRate: 100
+   *   },
+   *   participants: [...]
+   * }
    */
+
 
   const summary =
     result.summary || {};
 
 
-  participants =
-    result.participants || [];
+  /*
+   * Support both:
+   *
+   * result.summary.totalRegistered
+   *
+   * and
+   *
+   * result.totalRegistered
+   *
+   * so the dashboard remains compatible.
+   */
 
+
+  const totalRegistered =
+    summary.totalRegistered !== undefined
+
+      ? summary.totalRegistered
+
+      : (
+          result.totalRegistered !== undefined
+
+            ? result.totalRegistered
+
+            : 0
+        );
+
+
+  const totalAttended =
+    summary.totalAttended !== undefined
+
+      ? summary.totalAttended
+
+      : (
+          result.totalAttended !== undefined
+
+            ? result.totalAttended
+
+            : 0
+        );
+
+
+  const totalAbsent =
+    summary.totalAbsent !== undefined
+
+      ? summary.totalAbsent
+
+      : (
+          result.totalAbsent !== undefined
+
+            ? result.totalAbsent
+
+            : 0
+        );
+
+
+  const attendanceRate =
+    summary.attendanceRate !== undefined
+
+      ? summary.attendanceRate
+
+      : (
+          result.attendanceRate !== undefined
+
+            ? result.attendanceRate
+
+            : (
+                totalRegistered > 0
+
+                  ? (
+                      totalAttended /
+                      totalRegistered
+                    ) *
+                    100
+
+                  : 0
+              )
+        );
+
+
+  participants =
+    Array.isArray(
+      result.participants
+    )
+
+      ? result.participants
+
+      : [];
+
+
+  /*
+   * UPDATE STATISTICS
+   */
 
   document.getElementById(
     "totalRegistered"
   ).textContent =
-    summary.totalRegistered ?? 0;
+    totalRegistered;
 
 
   document.getElementById(
     "totalAttended"
   ).textContent =
-    summary.totalAttended ?? 0;
+    totalAttended;
 
 
   document.getElementById(
     "totalAbsent"
   ).textContent =
-    summary.totalAbsent ?? 0;
+    totalAbsent;
 
 
   document.getElementById(
     "attendancePercentage"
   ).textContent =
-    (
-      summary.attendanceRate ?? 0
-    ) +
+    Number(
+      attendanceRate
+    ).toFixed(2) +
     "%";
 
+
+  /*
+   * LAST UPDATED
+   */
 
   document.getElementById(
     "lastUpdated"
@@ -664,6 +679,10 @@ function handleDashboardResult(
         : "—"
     );
 
+
+  /*
+   * PARTICIPANT TABLE
+   */
 
   renderTable(
     participants
@@ -687,6 +706,7 @@ function renderTable(
 
 
   if (
+    !Array.isArray(list) ||
     list.length === 0
   ) {
 
@@ -719,9 +739,16 @@ function renderTable(
         );
 
 
+      const status =
+        String(
+          participant.status ||
+          "ABSENT"
+        )
+          .toUpperCase();
+
+
       const statusClass =
-        participant.status ===
-        "PRESENT"
+        status === "PRESENT"
 
           ? "present"
 
@@ -730,9 +757,7 @@ function renderTable(
 
       const attendanceTime =
         participant.timestamp
-          ? formatDate(
-              participant.timestamp
-            )
+          ? participant.timestamp
           : "—";
 
 
@@ -775,7 +800,7 @@ function renderTable(
         '">' +
 
         escapeHtml(
-          participant.status
+          status
         ) +
 
         "</td>" +
@@ -837,7 +862,8 @@ document
             return (
 
               String(
-                participant.participantId
+                participant.participantId ||
+                ""
               )
                 .toLowerCase()
                 .includes(
@@ -847,7 +873,8 @@ document
               ||
 
               String(
-                participant.fullName
+                participant.fullName ||
+                ""
               )
                 .toLowerCase()
                 .includes(
@@ -857,7 +884,8 @@ document
               ||
 
               String(
-                participant.barangay
+                participant.barangay ||
+                ""
               )
                 .toLowerCase()
                 .includes(
@@ -867,7 +895,8 @@ document
               ||
 
               String(
-                participant.position
+                participant.position ||
+                ""
               )
                 .toLowerCase()
                 .includes(
@@ -877,7 +906,8 @@ document
               ||
 
               String(
-                participant.status
+                participant.status ||
+                ""
               )
                 .toLowerCase()
                 .includes(
@@ -914,15 +944,6 @@ function formatDate(
 
   }
 
-
-  /*
-   * Your Apps Script currently returns
-   * timestamps such as:
-   *
-   * "Aug 18, 2026 11:33:41 AM"
-   *
-   * which JavaScript can usually parse.
-   */
 
   const date =
     new Date(
@@ -999,7 +1020,7 @@ function showError(
 
 
 /* ============================================================
-   CLEAN JSONP
+   CLEANUP JSONP
 ============================================================ */
 
 function cleanup(
@@ -1076,7 +1097,11 @@ function escapeHtml(
 
 window.addEventListener(
   "load",
-  loadDashboard
+  function() {
+
+    loadDashboard();
+
+  }
 );
 
 </script>
